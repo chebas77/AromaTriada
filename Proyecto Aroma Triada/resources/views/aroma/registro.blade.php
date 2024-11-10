@@ -1,25 +1,41 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Iniciar Sesión</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-red-600 flex items-center justify-center min-h-screen">
-    <div class="bg-red-100 rounded-lg p-8 w-80 text-center shadow-lg">
-        <h2 class="text-2xl font-semibold mb-4 text-gray-800">INICIA SESIÓN</h2>
-        <p class="text-sm mb-4">¿No tienes una cuenta? <a href="#" class="text-red-500 hover:underline">únete ahora</a></p>
-        <form>
-            <input type="email" placeholder="correo electrónico" class="w-full px-4 py-2 mb-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-red-400" required>
-            <input type="password" placeholder="contraseña" class="w-full px-4 py-2 mb-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-red-400" required>
-            <a href="#" class="text-sm text-red-500 hover:underline block mb-3">olvidé mi contraseña</a>
-            <button type="submit" class="w-full bg-red-500 text-white py-2 rounded hover:bg-red-600 transition">iniciar sesión</button>
+<!-- resources/views/register.blade.php -->
+@extends('recursos.app')
+
+@section('title', 'Registro de Usuario')
+
+@section('content')
+<div class="flex justify-center mt-12">
+    <!-- Registration Form -->
+    <section class="bg-white shadow-lg rounded-lg p-8 w-full max-w-md">
+        <h2 class="text-2xl font-bold text-center mb-6">Crear una Cuenta</h2>
+        <form class="space-y-6">
+            <!-- Name -->
+            <div>
+                <label class="block text-gray-700 font-bold mb-2" for="name">Nombre</label>
+                <input id="name" type="text" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-black" placeholder="Nombre Completo">
+            </div>
+            <!-- Email -->
+            <div>
+                <label class="block text-gray-700 font-bold mb-2" for="email">Correo Electrónico</label>
+                <input id="email" type="email" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-black" placeholder="correo@example.com">
+            </div>
+            <!-- Password -->
+            <div>
+                <label class="block text-gray-700 font-bold mb-2" for="password">Contraseña</label>
+                <input id="password" type="password" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-black" placeholder="Contraseña">
+            </div>
+            <!-- Confirm Password -->
+            <div>
+                <label class="block text-gray-700 font-bold mb-2" for="confirm-password">Confirmar Contraseña</label>
+                <input id="confirm-password" type="password" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-black" placeholder="Confirmar Contraseña">
+            </div>
+            <!-- Register Button -->
+            <button type="submit" class="w-full bg-black text-white py-2 font-bold rounded hover:bg-gray-800">Registrarse</button>
         </form>
-        <div class="flex justify-between mt-4">
-            <button class="w-5/12 bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition">facebook</button>
-            <button class="w-5/12 bg-red-600 text-white py-2 rounded hover:bg-red-700 transition">google</button>
-        </div>
-    </div>
-</body>
-</html>
+        <p class="text-center text-gray-600 mt-6">
+            ¿Ya tienes una cuenta?
+            <a href="#" class="text-blue-500 hover:underline">Inicia Sesión</a>
+        </p>
+    </section>
+</div>
+@endsection

@@ -1,26 +1,21 @@
 <?php
 
+use App\Http\Controllers\AromaController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/aroma', function () {
-    return view('aroma.index');
+
+Route::get('/aroma/index', [AromaController::class, 'index'])->name('aroma.index');
+
+
+Route::prefix('aroma')->controller(AromaController::class)->group(function () {
+    Route::get('/catalogo', 'catalogo')->name('aroma.catalogo');
+    Route::get('/aroma/perfil', 'perfil')->name('aroma.perfil');
+    Route::get('/registro', 'registro')->name('aroma.registro');
+    Route::get('/nosotros', 'nosotros')->name('aroma.nosotros');
+    Route::get('/preguntas', 'preguntas')->name('aroma.preguntas');
+    Route::get('/productos', 'productos')->name('aroma.productos');
 });
 
-Route::get('/aroma/perfil', function () {
-    return view('aroma.perfil');
-});
-
-Route::get('/aroma/registro', function () {
-    return view('aroma.registro');
-});
-
-Route::get('/aroma/somos', function () {
-    return view('aroma.somos');
-});
-
-Route::get('/', function () {
-    return view('welcome');
-});
 
 Route::middleware([
     'auth:sanctum',
