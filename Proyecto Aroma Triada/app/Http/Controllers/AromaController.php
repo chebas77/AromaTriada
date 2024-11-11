@@ -2,22 +2,49 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Categoria;
+use App\Models\Producto;
+use App\Models\Servicio;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 
 class AromaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function catalogo(Request $request)
     {
-        return view('aroma.index');
-    }
-    public function catalogo()
-    {
-        return view('aroma.catalogo');
+        $categorias = Categoria::all();
+        $productos = Producto::query();
+        $servicios = Servicio::query();
+
+        if ($request->filled('categoria_id')) {
+            $productos->where('id_categoria', $request->categoria_id);
+            $servicios->where('id_categoria', $request->categoria_id);
+        }
+
+        $productos = $productos->get();
+        $servicios = $servicios->get();
+        $totalResultados = $productos->count() + $servicios->count();
+
+        return view('aroma.catalogo', compact('categorias', 'productos', 'servicios', 'totalResultados'));
     }
 
+    public function index()
+    {
+        $productosDestacados = Producto::all();
+        $categorias = Categoria::all(); // Agregar esta línea para obtener las categorías
+
+        if ($productosDestacados->isEmpty()) {
+            return "No se encontraron productos";  // Esto puede ser útil para depuración
+        }
+
+        return view('aroma.index', compact('productosDestacados', 'categorias'));
+    }
+    public function carrito()
+    {
+        // Aquí puedes agregar la lógica para mostrar el carrito
+        return view('aroma.carrito');
+    }
     public function perfil()
     {
         return view('aroma.perfil');
@@ -43,60 +70,8 @@ class AromaController extends Controller
         return view('aroma.productos');
     }
 
-    public function carrito()
-    {
-        return view('aroma.carrito');
-    }
-
     public function inicioSesion()
     {
         return view('aroma.inicioSesion');
-    }
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
     }
 }
