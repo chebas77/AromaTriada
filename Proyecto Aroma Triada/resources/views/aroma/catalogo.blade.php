@@ -1,5 +1,5 @@
 @extends('recursos.app')
-@section('title', 'Catalogo ')
+@section('title', 'Cataloguito ')
 
 @section('content', )
 <!-- Store Banner -->
