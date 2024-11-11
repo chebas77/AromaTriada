@@ -16,6 +16,12 @@
 <section class="container mx-auto py-12 px-6 flex flex-col md:flex-row gap-8">
   <!-- Sidebar -->
   <aside class="md:w-1/4">
+
+
+  <!--CAMBIAR ESTA MRD "FUNCION QUE MUESTRE CATEGORIAS DELAS BASE DE DATOS" -->
+
+
+
     <h3 class="text-xl font-bold mb-4">Categorías</h3>
     <ul class="space-y-2">
       <li><label class="flex items-center"><input type="checkbox" class="mr-2"> Categoría 1</label></li>

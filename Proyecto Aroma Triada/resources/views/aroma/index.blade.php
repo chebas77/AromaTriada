@@ -3,6 +3,10 @@
 
 @section('content')
 
+
+<!--COMPLEMENTAR CON LA FUNCION DE LA PAGINA E IDEAS -->
+
+
 <!-- Hero Section -->
 <section class="bg-gray-200 py-16 text-center">
   <h1 class="text-3xl font-bold mb-2">Texto sobre la promesa de tu negocio</h1>

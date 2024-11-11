@@ -3,6 +3,7 @@
 
 @section('content')
 
+<!-- ACTUALIZAR ESTA PENDEJADA CON PREGUNTAS PENDEJAS DE GENTE CON DIABETES -->
 
 <!-- FAQ Section -->
 <section class="container mx-auto py-12 px-6">
@@ -21,11 +22,14 @@
         <details class="bg-white shadow p-4 rounded">
           <summary class="font-medium cursor-pointer">Pregunta 1</summary>
           <p class="mt-2 text-gray-700">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tempus efficitur, ut rutrum ipsum.
+          ANGELA SE LA COMEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
           </p>
         </details>
         <details class="bg-white shadow p-4 rounded">
           <summary class="font-medium cursor-pointer">Pregunta 2</summary>
+          <p class="mt-2 text-gray-700">
+            ANGELA SE LA COMEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+          </p>
         </details>
       </div>
     </div>
@@ -36,6 +40,9 @@
       <div class="space-y-4">
         <details class="bg-white shadow p-4 rounded">
           <summary class="font-medium cursor-pointer">Pregunta 3</summary>
+          <p class="mt-2 text-gray-700">
+            ANGELA SE LA COMEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+          </p>
         </details>
       </div>
     </div>
@@ -46,9 +53,15 @@
       <div class="space-y-4">
         <details class="bg-white shadow p-4 rounded">
           <summary class="font-medium cursor-pointer">Pregunta 4</summary>
+          <p class="mt-2 text-gray-700">
+            ANGELA SE LA COMEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+          </p>
         </details>
         <details class="bg-white shadow p-4 rounded">
           <summary class="font-medium cursor-pointer">Pregunta 5</summary>
+          <p class="mt-2 text-gray-700">
+            ANGELA SE LA COMEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+          </p>
         </details>
       </div>
     </div>
@@ -59,6 +72,9 @@
       <div class="space-y-4">
         <details class="bg-white shadow p-4 rounded">
           <summary class="font-medium cursor-pointer">Pregunta 6</summary>
+          <p class="mt-2 text-gray-700">
+            ANGELA SE LA COMEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+          </p>
         </details>
       </div>
     </div>
@@ -69,9 +85,15 @@
       <div class="space-y-4">
         <details class="bg-white shadow p-4 rounded">
           <summary class="font-medium cursor-pointer">Pregunta 7</summary>
+          <p class="mt-2 text-gray-700">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tempus efficitur, ut rutrum ipsum.
+          </p>
         </details>
         <details class="bg-white shadow p-4 rounded">
           <summary class="font-medium cursor-pointer">Pregunta 8</summary>
+          <p class="mt-2 text-gray-700">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tempus efficitur, ut rutrum ipsum.
+          </p>
         </details>
       </div>
     </div>
@@ -82,9 +104,15 @@
       <div class="space-y-4">
         <details class="bg-white shadow p-4 rounded">
           <summary class="font-medium cursor-pointer">Pregunta 9</summary>
+          <p class="mt-2 text-gray-700">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tempus efficitur, ut rutrum ipsum.
+          </p>
         </details>
         <details class="bg-white shadow p-4 rounded">
           <summary class="font-medium cursor-pointer">Pregunta 10</summary>
+          <p class="mt-2 text-gray-700">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tempus efficitur, ut rutrum ipsum.
+          </p>
         </details>
       </div>
     </div>

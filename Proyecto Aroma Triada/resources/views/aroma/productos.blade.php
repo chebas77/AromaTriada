@@ -6,7 +6,7 @@
 
 <!-- Breadcrumb -->
 <div class="container mx-auto py-4 px-6 text-sm text-gray-500">
-  <a href="#" class="hover:underline">Inicio</a> / <a href="#" class="hover:underline">Tienda</a> /
+  <a href=" {{ route('aroma.index') }} " class="hover:underline">Inicio</a> / <a href=" {{ route('aroma.catalogo') }} " class="hover:underline">Tienda</a> /
   <a href="#" class="hover:underline">Categoría</a> / Producto 1
 </div>
 

@@ -3,6 +3,8 @@
 
 @section('content')
 
+<!-- COMPLETAR CON INFORMACION DEL PROYECTO Y LOS INDESEABLES QUE LO ESTAN HACIENDO --> 
+
 
 <!-- Hero Section -->
 <section class="bg-gray-200 py-20 flex items-center justify-center">
