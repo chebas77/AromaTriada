@@ -3,12 +3,12 @@
 use App\Http\Controllers\AromaController;
 use Illuminate\Support\Facades\Route;
 
+
+Route::get('/aroma/index', [AromaController::class, 'index'])->name('aroma.index');
+
 Route::get('/', function () {
     return view('aroma.index');
 });
-Route::get('/aroma/index', [AromaController::class, 'index'])->name('aroma.index');
-
-
 Route::prefix('aroma')->controller(AromaController::class)->group(function () {
     Route::get('/catalogo', 'catalogo')->name('aroma.catalogo');
     Route::get('/aroma/perfil', 'perfil')->name('aroma.perfil');
