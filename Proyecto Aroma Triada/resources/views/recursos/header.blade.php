@@ -18,10 +18,15 @@
         <li><a href="{{route('aroma.catalogo')}}" class="hover:underline">CATALOGO</a></li>
         <li><a href="{{route('aroma.productos')}}" class="hover:underline">PRODUCTOS</a></li>
       </ul>
+
       <div class="flex space-x-4 items-center">
         <a href="#" class="hover:underline">🔍</a>
-        <a href="#" class="hover:underline">🛒</a>
+        <a href="{{route('aroma.carrito')}}" class="hover:underline">🛒</a>
         <a href="{{ route('aroma.perfil') }}" class="hover:underline">👤</a>
       </div>
     </nav>
+    <div class="container mx-auto py-4 px-6 text-sm text-gray-500">
+      <a href=" {{ route('aroma.inicioSesion') }} " class="hover:underline">Iniciar Sesion</a> /
+      <a href=" {{ route('aroma.registro') }} " class="hover:underline">Registrarse</a>
+    </div>
   </header>

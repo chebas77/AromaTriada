@@ -17,6 +17,8 @@ Route::prefix('aroma')->controller(AromaController::class)->group(function () {
     Route::get('/nosotros', 'nosotros')->name('aroma.nosotros');
     Route::get('/preguntas', 'preguntas')->name('aroma.preguntas');
     Route::get('/productos', 'productos')->name('aroma.productos');
+    Route::get('/carrito', 'carrito')->name('aroma.carrito');
+    Route::get('/inicioSesion', 'inicioSesion')->name('aroma.inicioSesion');
 });
 
 

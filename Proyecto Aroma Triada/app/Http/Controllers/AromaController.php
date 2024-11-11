@@ -42,6 +42,16 @@ class AromaController extends Controller
     {
         return view('aroma.productos');
     }
+
+    public function carrito()
+    {
+        return view('aroma.carrito');
+    }
+
+    public function inicioSesion()
+    {
+        return view('aroma.inicioSesion');
+    }
     /**
      * Show the form for creating a new resource.
      */
