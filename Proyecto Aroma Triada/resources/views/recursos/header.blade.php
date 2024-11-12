@@ -17,7 +17,7 @@
         <li><a href="{{route('aroma.preguntas')}}" class="hover:underline">PREGUNTAS</a></li>
         <li><a href="{{route('aroma.catalogo')}}" class="hover:underline">CATALOGO</a></li>
         <li><a href="{{route('aroma.productos')}}" class="hover:underline">PRODUCTOS</a></li>
-      </ul>
+      </ul>   
 
       <div class="flex space-x-4 items-center">
         <a href="#" class="hover:underline">🔍</a>
