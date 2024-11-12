@@ -9,8 +9,15 @@ use Illuminate\Http\Request;
 
 class CarritoController extends Controller
 {
-    // Elimina los métodos relacionados con el carrito, por ejemplo:
-    // public function index() { ... }
-    // public function agregar(Request $request, $id) { ... }
-    // public function eliminar($id) { ... }
+     // Agrega un producto o servicio al carrito
+     public function agregarProducto(Request $request)
+     {
+         // Lógica para agregar un producto/servicio al carrito
+     }
+ 
+     // Muestra el carrito de compras
+     public function mostrarCarrito()
+     {
+         // Lógica para mostrar los productos/servicios en el carrito
+     }
 }
