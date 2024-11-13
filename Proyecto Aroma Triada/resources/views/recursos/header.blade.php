@@ -21,7 +21,7 @@
 
       <div class="flex space-x-4 items-center">
         <a href="#" class="hover:underline">🔍</a>
-        <a href="#" class="hover:underline">🛒</a>
+        <a href="{{route('carrito.mostrar')}}" class="hover:underline">🛒</a>
         <a href="{{ route('aroma.perfil') }}" class="hover:underline">👤</a>
       </div>
     </nav>

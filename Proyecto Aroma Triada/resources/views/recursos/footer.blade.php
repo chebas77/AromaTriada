@@ -8,8 +8,7 @@
       <ul class="space-y-2 text-gray-400">
         <li><a href="{{ route('aroma.index') }}" class="hover:text-white">Inicio</a></li>
         <li><a href="{{ route('aroma.catalogo') }}" class="hover:text-white">Catálogo</a></li>
-        <li><a href="#" class="hover:text-white">Carrito de Compras</a></li>
-        <li><a href="#" class="hover:text-white">Contacto</a></li>
+        <li><a href="{{route('carrito.mostrar')}}" class="hover:text-white">Carrito de Compras</a></li>
         <li><a href="{{ route('aroma.nosotros') }}" class="hover:text-white">Nosotros</a></li>
       </ul>
     </div>

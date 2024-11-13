@@ -37,7 +37,7 @@ class DatabaseSeeder extends Seeder
         if (DB::table('productos')->count() == 0) {
             DB::table('productos')->insert([
                 ['nombre' => 'Torta de Chocolate', 'descripcion' => 'Torta de Chocolate ', 'precio' => 100.00, 'id_categoria' => 1, 'created_at' => now(), 'updated_at' => now()],
-                ['nombre' => 'Petit Pan de Pollo', 'descripcion' => 'Torta de 3 Leches', 'precio' => 150.00, 'id_categoria' => 2, 'created_at' => now(), 'updated_at' => now()],
+                ['nombre' => 'Petit Pan de Pollo', 'descripcion' => 'Panes tipo Petit Pan rellenos de Pollo con crema', 'precio' => 150.00, 'id_categoria' => 2, 'created_at' => now(), 'updated_at' => now()],
             ]);
         }
 
@@ -48,5 +48,6 @@ class DatabaseSeeder extends Seeder
                 ['nombre' => 'Decoracion', 'descripcion' => 'Implementacion de un personal adecuado que se encargue de un mejor aspecto al evento', 'precio' => 250.00, 'id_categoria' => 4, 'created_at' => now(), 'updated_at' => now()],
             ]);
         }
+        $this->call(ProductosYServiciosSeeder::class);
     }
 }

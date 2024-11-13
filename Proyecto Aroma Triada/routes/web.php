@@ -2,12 +2,20 @@
 
 use App\Http\Controllers\AromaController;
 use App\Http\Controllers\CarritoController;
+use App\Http\Controllers\ProductoController;
+
+
 use Illuminate\Support\Facades\Route;
 
 Route::get('/carrito', [CarritoController::class, 'mostrarCarrito'])->name('carrito.mostrar');
 Route::post('/carrito/agregar', [CarritoController::class, 'agregar'])->name('carrito.agregar');
 Route::delete('/carrito/eliminar', [CarritoController::class, 'eliminar'])->name('carrito.eliminar');
+// En web.php
+Route::patch('/carrito/actualizar', [CarritoController::class, 'actualizarCantidad'])->name('carrito.actualizar');
 
+
+Route::get('/detalle/{tipo}/{id}', [ProductoController::class, 'mostrarDetalle'])->name('detalle.mostrar');
+Route::post('/carrito/agregar', [CarritoController::class, 'agregar'])->name('carrito.agregar');
 
 
 

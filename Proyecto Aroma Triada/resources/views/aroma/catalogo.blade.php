@@ -49,7 +49,6 @@
     @else
 
     <!-- Productos -->
-    <!-- Productos -->
     <div class="mb-12">
       <h3 class="text-lg font-medium mb-4">Productos</h3>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -66,14 +65,14 @@
           <form action="{{ route('carrito.agregar') }}" method="POST">
             @csrf
             <input type="hidden" name="tipo" value="producto">
+            <a href="{{ route('detalle.mostrar', ['tipo' => 'producto', 'id' => $producto->id_producto]) }}" class="text-blue-500 hover:underline">Ver más información</a>
             <input type="hidden" name="id" value="{{ $producto->id_producto }}"> <!-- ID del producto -->
-            <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded">Agregar al Carrito</button>
+            <button type="submit" class="bg-black text-white px-6 py-2 font-bold hover:bg-gray-800 w-full">Agregar al Carrito</button>
           </form>
         </div>
         @endforeach
       </div>
     </div>
-
 
     <!-- Servicios -->
     <div>
@@ -92,8 +91,9 @@
           <form action="{{ route('carrito.agregar') }}" method="POST">
             @csrf
             <input type="hidden" name="tipo" value="servicio">
-            <input type="hidden" name="id" value="{{ $servicio->id_servicio}}"> <!-- ID del servicio -->
-            <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded">Agregar al Carrito</button>
+            <a href="{{ route('detalle.mostrar', ['tipo' => 'servicio', 'id' => $servicio->id_servicio]) }}" class="text-blue-500 hover:underline">Ver más información</a>
+            <input type="hidden" name="id" value="{{ $servicio->id_servicio }}"> <!-- ID del servicio -->
+            <button type="submit" class="bg-black text-white px-6 py-2 font-bold hover:bg-gray-800 w-full">Agregar al Carrito</button>
           </form>
         </div>
         @endforeach
