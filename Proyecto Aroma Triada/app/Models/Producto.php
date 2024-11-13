@@ -9,9 +9,18 @@ class Producto extends Model
 {
     use HasFactory;
 
-    // Define la clave primaria y los campos asignables
     protected $primaryKey = 'id_producto';
-    protected $fillable = ['nombre', 'descripcion', 'precio', 'imagen', 'disponibilidad', 'tipo_producto', 'id_categoria'];
+
+    // Consolidamos los campos de fillable en una sola declaración
+    protected $fillable = [
+        'nombre',
+        'descripcion',
+        'precio',
+        'imagen',
+        'disponibilidad',
+        'tipo_producto',
+        'id_categoria'
+    ];
 
     /**
      * Relación con la categoría.

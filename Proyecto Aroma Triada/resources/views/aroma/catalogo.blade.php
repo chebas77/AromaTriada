@@ -49,10 +49,11 @@
     @else
 
     <!-- Productos -->
+    <!-- Productos -->
     <div class="mb-12">
       <h3 class="text-lg font-medium mb-4">Productos</h3>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        @forelse ($productos as $producto)
+        @foreach($productos as $producto)
         <div class="bg-white shadow p-4 rounded">
           <div class="bg-gray-300 h-40 mb-4">
             <img src="{{ asset($producto->imagen) }}" alt="{{ $producto->nombre }}" class="h-full w-full object-cover">
@@ -60,18 +61,25 @@
           <h4 class="text-sm font-bold text-gray-500">{{ $producto->categoria->nombre ?? 'Sin categoría' }}</h4>
           <p class="text-gray-800 mb-2">{{ $producto->nombre }}</p>
           <p class="text-gray-700 font-bold mb-4">${{ number_format($producto->precio, 2) }}</p>
+
+          <!-- Formulario para agregar producto al carrito -->
+          <form action="{{ route('carrito.agregar') }}" method="POST">
+            @csrf
+            <input type="hidden" name="tipo" value="producto">
+            <input type="hidden" name="id" value="{{ $producto->id_producto }}"> <!-- ID del producto -->
+            <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded">Agregar al Carrito</button>
+          </form>
         </div>
-        @empty
-        <p>No hay productos en esta categoría.</p>
-        @endforelse
+        @endforeach
       </div>
     </div>
+
 
     <!-- Servicios -->
     <div>
       <h3 class="text-lg font-medium mb-4">Servicios</h3>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        @forelse ($servicios as $servicio)
+        @foreach($servicios as $servicio)
         <div class="bg-white shadow p-4 rounded">
           <div class="bg-gray-300 h-40 mb-4">
             <img src="{{ asset($servicio->imagen) }}" alt="{{ $servicio->nombre }}" class="h-full w-full object-cover">
@@ -79,14 +87,19 @@
           <h4 class="text-sm font-bold text-gray-500">Servicio</h4>
           <p class="text-gray-800 mb-2">{{ $servicio->nombre }}</p>
           <p class="text-gray-700 font-bold mb-4">${{ number_format($servicio->precio, 2) }}</p>
+
+          <!-- Formulario para agregar servicio al carrito -->
+          <form action="{{ route('carrito.agregar') }}" method="POST">
+            @csrf
+            <input type="hidden" name="tipo" value="servicio">
+            <input type="hidden" name="id" value="{{ $servicio->id_servicio}}"> <!-- ID del servicio -->
+            <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded">Agregar al Carrito</button>
+          </form>
         </div>
-        @empty
-        <p>No hay servicios en esta categoría.</p>
-        @endforelse
+        @endforeach
       </div>
     </div>
     @endif
   </div>
 </section>
 @endsection
-
