@@ -9,21 +9,41 @@ use Illuminate\Http\Request;
 
 class CarritoController extends Controller
 {
-    // Muestra el contenido del carrito
+    // Muestra los servicios disponibles para agregar al carrito
+    // Muestra el contenido del carrito y los servicios disponibles
     public function mostrarCarrito()
     {
-        // Recuperar los IDs de productos y servicios desde la sesión
-        $productoIds = session()->get('producto_ids', []);
-        $servicioIds = session()->get('servicio_ids', []);
+        // Obtener los productos añadidos al carrito de la sesión
+        $carrito = session()->get('carrito', []);
 
-        // Obtener los detalles de los productos y servicios con los IDs
-        $productos = Producto::whereIn('id_producto', $productoIds)->get();
-        $servicios = Servicio::whereIn('id_servicio', $servicioIds)->get();
+        // Obtener todos los servicios disponibles
+        $servicios = Servicio::all();
 
-        // Pasar los datos de productos y servicios a la vista del carrito
-        return view('aroma.carrito', compact('productos', 'servicios'));
+        // Pasar los datos de productos en el carrito y los servicios a la vista
+        return view('aroma.carrito', compact('carrito', 'servicios'));
+    }
+    public function agregarServicios(Request $request)
+{
+    $carrito = session()->get('carrito', []);
+
+    foreach ($request->input('servicios', []) as $id => $cantidad) {
+        if ($cantidad > 0) {
+            $servicio = Servicio::find($id);
+            $key = 'servicio-' . $id;
+
+            $carrito[$key] = [
+                'id' => $id,
+                'nombre' => $servicio->nombre,
+                'precio' => $servicio->precio,
+                'cantidad' => $cantidad,
+                'tipo' => 'servicio',
+            ];
+        }
     }
 
+    session()->put('carrito', $carrito);
+    return redirect()->route('carrito.mostrar')->with('success', 'Servicios agregados al carrito');
+}
     // Agrega un producto o servicio al carrito
     public function agregar(Request $request)
     {

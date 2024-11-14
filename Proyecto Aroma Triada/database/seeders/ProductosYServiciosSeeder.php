@@ -55,7 +55,7 @@ class ProductosYServiciosSeeder extends Seeder
             ],
         ]);
         // Insertar boxes de ejemplo
-        DB::table('servicios')->insert([
+        DB::table('productos')->insert([
             [
                 'nombre' => 'Box Fiesta',
                 'descripcion' => 'Box Fiesta con decoraciones y snacks',
