@@ -27,3 +27,6 @@ class ProductoController extends Controller
         return view('aroma.productos', compact('item', 'relacionados', 'tipoItem'));
     }
 }
+
+    // Filtra los productos según ciertos criterios
+   

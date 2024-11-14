@@ -9,7 +9,7 @@
     <h2 class="text-3xl font-bold">Preguntas Frecuentes</h2>
     <p class="text-gray-700 mt-4">
       Encuentra respuestas a las preguntas más comunes sobre nuestros productos, servicios de catering, y procesos de compra. Si tienes alguna otra duda, no dudes en contactarnos.
-    </p>
+    </p>  
   </div>
 
   <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
