@@ -11,29 +11,19 @@ class ProductoController extends Controller
     // Muestra la lista de productos
     public function mostrarDetalle($tipo, $id)
     {
-        // Obtener el elemento en función del tipo y el ID
         if ($tipo === 'producto') {
-            $item = Producto::findOrFail($id);
-            $relacionados = Producto::where('id_categoria', $item->id_categoria)
-                                    ->where('id_producto', '!=', $id)
-                                    ->take(4)
-                                    ->get();
+            $item = Producto::findOrFail($id);  // Encuentra el producto o lanza un 404 si no existe
+            $tipoItem = 'producto';
         } elseif ($tipo === 'servicio') {
-            $item = Servicio::findOrFail($id);
-            $relacionados = Servicio::where('id_categoria', $item->id_categoria)
-                                    ->where('id_servicio', '!=', $id)
-                                    ->take(4)
-                                    ->get();
+            $item = Servicio::findOrFail($id);  // Encuentra el servicio o lanza un 404 si no existe
+            $tipoItem = 'servicio';
         } else {
-            abort(404); // Si el tipo no es producto o servicio, se retorna un error 404
+            abort(404);  // Si el tipo no es válido, retorna un error 404
         }
 
-        return view('aroma.productos', compact('item', 'relacionados', 'tipo'));
-    }
+        // Productos o servicios relacionados (puedes ajustar esta lógica según lo que consideres relacionado)
+        $relacionados = Producto::inRandomOrder()->take(4)->get();
 
-    // Filtra los productos según ciertos criterios
-    public function filtro(Request $request)
-    {
-        // Lógica para filtrar productos según el request
+        return view('aroma.productos', compact('item', 'relacionados', 'tipoItem'));
     }
 }

@@ -7,17 +7,22 @@ use App\Http\Controllers\ProductoController;
 
 use Illuminate\Support\Facades\Route;
 
+// Rutas para el catálogo y el detalle del producto
+Route::get('/catalogo', [ProductoController::class, 'catalogo'])->name('aroma.catalogo');
+Route::get('/detalle/{tipo}/{id}', [ProductoController::class, 'mostrarDetalle'])->name('detalle.mostrar');
+
+
+// Ruta para mostrar el carrito (productos)
 Route::get('/carrito', [CarritoController::class, 'mostrarCarrito'])->name('carrito.mostrar');
+Route::post('/carrito/agregar-servicios', [CarritoController::class, 'agregarServicios'])->name('carrito.agregarServicios');
+
+// Ruta para mostrar servicios
+Route::get('/servicios', [CarritoController::class, 'mostrarServicios'])->name('servicios.mostrar');
+
+// Ruta para agregar al carrito (productos o servicios)
 Route::post('/carrito/agregar', [CarritoController::class, 'agregar'])->name('carrito.agregar');
 Route::delete('/carrito/eliminar', [CarritoController::class, 'eliminar'])->name('carrito.eliminar');
-// En web.php
 Route::patch('/carrito/actualizar', [CarritoController::class, 'actualizarCantidad'])->name('carrito.actualizar');
-
-
-Route::get('/detalle/{tipo}/{id}', [ProductoController::class, 'mostrarDetalle'])->name('detalle.mostrar');
-Route::post('/carrito/agregar', [CarritoController::class, 'agregar'])->name('carrito.agregar');
-
-
 
 
 // Ruta principal (index)

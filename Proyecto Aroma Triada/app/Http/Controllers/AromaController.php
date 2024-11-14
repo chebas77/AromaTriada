@@ -35,7 +35,7 @@ class AromaController extends Controller
         session()->put('servicio_ids', $servicioIds);
     
         // Calcular el total de resultados
-        $totalResultados = $productos->count() + $servicios->count();
+        $totalResultados = $productos->count() ;
     
         // Pasar los datos a la vista
         return view('aroma.catalogo', compact('categorias', 'productos', 'servicios', 'totalResultados'));
