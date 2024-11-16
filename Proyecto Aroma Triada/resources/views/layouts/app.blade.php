@@ -34,7 +34,12 @@
 
             <!-- Page Content -->
             <main>
-                {{ $slot }}
+                @yield('content') {{-- Se utiliza para vistas tradicionales --}}
+                
+                {{-- Solo si $slot está definido, se utilizará como componente --}}
+                @isset($slot)
+                    {{ $slot }}
+                @endisset
             </main>
         </div>
 

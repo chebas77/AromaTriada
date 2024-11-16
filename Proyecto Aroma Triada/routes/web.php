@@ -3,9 +3,15 @@
 use App\Http\Controllers\AromaController;
 use App\Http\Controllers\CarritoController;
 use App\Http\Controllers\ProductoController;
-
+use App\Http\Controllers\PaymentController;
 
 use Illuminate\Support\Facades\Route;
+
+
+Route::get('/checkout', [PaymentController::class, 'checkout'])->name('checkout');
+Route::get('/payment/success', [PaymentController::class, 'success'])->name('payment.success');
+Route::get('/payment/cancel', [PaymentController::class, 'cancel'])->name('payment.cancel');
+
 
 // Rutas para el catálogo y el detalle del producto
 Route::get('/catalogo', [ProductoController::class, 'catalogo'])->name('aroma.catalogo');

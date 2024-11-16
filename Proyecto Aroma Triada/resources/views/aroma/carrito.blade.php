@@ -67,6 +67,12 @@
             </div>
             <button type="submit" class="bg-black text-white px-6 py-2 rounded-lg w-full mt-6">Agregar Servicios al Carrito</button>
         </form>
+        <div class="mt-6 text-right">
+    <a href="{{ route('checkout') }}" class="bg-black text-white px-6 py-3 rounded-lg font-bold hover:bg-gray-800">
+        Ir a Pagar
+    </a>
+</div>
+
     </section>
 
     <script>
