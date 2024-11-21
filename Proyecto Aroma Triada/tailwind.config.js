@@ -13,9 +13,15 @@ export default {
 
     theme: {
         extend: {
+
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },
+
+            colors: {
+                beige: '#d8b660', // Define el color beige personalizado
+            },
+
         },
     },
 

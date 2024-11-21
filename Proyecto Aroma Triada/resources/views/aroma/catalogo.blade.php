@@ -67,7 +67,8 @@
             <input type="hidden" name="tipo" value="producto">
             <a href="{{ route('detalle.mostrar', ['tipo' => 'producto', 'id' => $producto->id_producto]) }}" class="text-blue-500 hover:underline">Ver más información</a>
             <input type="hidden" name="id" value="{{ $producto->id_producto }}"> <!-- ID del producto -->
-            <button type="submit" class="bg-black text-white px-6 py-2 font-bold hover:bg-gray-800 w-full">Agregar al Carrito</button>
+            <button type="submit" class="bg-yellow-600 text-white px-6 py-2 font-bold hover:bg-gray-800 w-full">Agregar al Carrito</button>
+           
           </form>
         </div>
         @endforeach
