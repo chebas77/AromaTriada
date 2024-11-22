@@ -4,6 +4,7 @@ use App\Http\Controllers\AromaController;
 use App\Http\Controllers\CarritoController;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\AdminController; // Agregado para el CRUD de productos
 
 use Illuminate\Support\Facades\Route;
 
@@ -12,11 +13,9 @@ Route::get('/checkout', [PaymentController::class, 'checkout'])->name('checkout'
 Route::get('/payment/success', [PaymentController::class, 'success'])->name('payment.success');
 Route::get('/payment/cancel', [PaymentController::class, 'cancel'])->name('payment.cancel');
 
-
 // Rutas para el catálogo y el detalle del producto
 Route::get('/catalogo', [ProductoController::class, 'catalogo'])->name('aroma.catalogo');
 Route::get('/detalle/{tipo}/{id}', [ProductoController::class, 'mostrarDetalle'])->name('detalle.mostrar');
-
 
 // Ruta para mostrar el carrito (productos)
 Route::get('/carrito', [CarritoController::class, 'mostrarCarrito'])->name('carrito.mostrar');
@@ -29,7 +28,6 @@ Route::get('/servicios', [CarritoController::class, 'mostrarServicios'])->name('
 Route::post('/carrito/agregar', [CarritoController::class, 'agregar'])->name('carrito.agregar');
 Route::delete('/carrito/eliminar', [CarritoController::class, 'eliminar'])->name('carrito.eliminar');
 Route::patch('/carrito/actualizar', [CarritoController::class, 'actualizarCantidad'])->name('carrito.actualizar');
-
 
 // Ruta principal (index)
 Route::get('/', [AromaController::class, 'index'])->name('aroma.index');
@@ -46,11 +44,6 @@ Route::prefix('aroma')->controller(AromaController::class)->group(function () {
     Route::get('/inicioSesion', 'inicioSesion')->name('aroma.inicioSesion');
 });
 
-
-
-
-
-
 // Grupo de rutas protegidas por autenticación
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(function () {
     Route::get('/dashboard', [AromaController::class, 'index'])->name('dashboard'); // Redirecciona a la vista de inicio
@@ -58,4 +51,14 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     Route::get('/perfil', function () {
         return view('perfil'); // Asegúrate de que esta vista apunta correctamente a la vista de perfil
     })->name('perfil');
+
+    // Rutas para la gestión de productos en el administrador
+    Route::prefix('admin')->group(function () {
+        Route::get('productos', [AdminController::class, 'gestionarProductos'])->name('admin.gestionarProductos');
+        Route::get('productos/crear', [AdminController::class, 'crearProducto'])->name('admin.crearProducto');
+        Route::post('productos', [AdminController::class, 'guardarProducto'])->name('admin.guardarProducto');
+        Route::get('productos/{producto}/editar', [AdminController::class, 'editarProducto'])->name('admin.editarProducto');
+        Route::put('productos/{producto}', [AdminController::class, 'actualizarProducto'])->name('admin.actualizarProducto');
+        Route::delete('productos/{producto}', [AdminController::class, 'eliminarProducto'])->name('admin.eliminarProducto');
+    });
 });
