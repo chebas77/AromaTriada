@@ -9,9 +9,18 @@ class Servicio extends Model
 {
     use HasFactory;
 
-    // Especifica la clave primaria de la tabla si es diferente de 'id'
-    protected $primaryKey = 'id_servicio';
+    protected $table = 'servicios'; // Tabla servicios
+    protected $primaryKey = 'id_servicio'; // Llave primaria
 
-    // Otras propiedades del modelo
-    protected $fillable = ['nombre', 'descripcion', 'precio', 'imagen', 'id_categoria'];
+    protected $fillable = ['nombre', 'descripcion', 'precio', 'disponibilidad', 'tipo_servicio', 'id_categoria'];
+
+    public function categoria()
+    {
+        return $this->belongsTo(Categoria::class, 'id_categoria', 'id_categoria');
+    }
+
+    public function detalles()
+    {
+        return $this->hasMany(DetallePedido::class, 'id_servicio', 'id_servicio');
+    }
 }

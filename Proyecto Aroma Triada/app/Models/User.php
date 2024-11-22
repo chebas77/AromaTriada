@@ -13,6 +13,22 @@ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
+    use HasFactory, Notifiable;
+
+    protected $table = 'users'; // Tabla users
+    protected $primaryKey = 'id'; // Llave primaria (por defecto en Laravel es "id")
+
+ 
+
+    public function rol()
+    {
+        return $this->belongsTo(Rol::class, 'id_rol', 'id_rol');
+    }
+
+    public function pedidos()
+    {
+        return $this->hasMany(Pedido::class, 'id_usuario', 'id');
+    }
     use HasApiTokens;
 
     /** @use HasFactory<\Database\Factories\UserFactory> */
@@ -31,6 +47,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'id_rol',
     ];
 
     /**

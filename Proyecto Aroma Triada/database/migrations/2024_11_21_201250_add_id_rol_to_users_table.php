@@ -11,9 +11,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->foreignId('id_rol')->default(2)->constrained('roles')->after('id'); // Relaciona con la tabla roles, valor predeterminado: 2
-        });
+        if (!Schema::hasColumn('users', 'id_rol')) { // Verifica si la columna ya existe
+            Schema::table('users', function (Blueprint $table) {
+                $table->bigInteger('id_rol')->unsigned()->default(2)->after('id');
+            });
+        }
     }
 
     public function down()

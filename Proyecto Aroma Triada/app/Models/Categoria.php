@@ -9,27 +9,18 @@ class Categoria extends Model
 {
     use HasFactory;
 
-    // Especifica la clave primaria si usa un nombre diferente al estándar `id`
-    protected $primaryKey = 'id_categoria';
+    protected $table = 'categorias'; // Tabla categorias
+    protected $primaryKey = 'id_categoria'; // Llave primaria
 
-    // Define los atributos que se pueden asignar de manera masiva
     protected $fillable = ['nombre', 'descripcion'];
 
-    /**
-     * Relación con los productos.
-     * Una categoría puede tener muchos productos.
-     */
     public function productos()
     {
-        return $this->hasMany(Producto::class, 'id_categoria');
-    }
-    public function servicios()
-    {
-        return $this->hasMany(Servicio::class, 'id_categoria');
+        return $this->hasMany(Producto::class, 'id_categoria', 'id_categoria');
     }
 
-    /**
-     * Relación con los servicios (opcional).
-     * Si tienes una tabla de servicios relacionada con categorías.
-     */
+    public function servicios()
+    {
+        return $this->hasMany(Servicio::class, 'id_categoria', 'id_categoria');
+    }
 }
