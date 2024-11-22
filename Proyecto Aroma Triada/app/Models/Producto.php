@@ -9,25 +9,18 @@ class Producto extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = 'id_producto';
+    protected $table = 'productos'; // Tabla productos
+    protected $primaryKey = 'id_producto'; // Llave primaria
 
-    // Consolidamos los campos de fillable en una sola declaración
-    protected $fillable = [
-        'nombre',
-        'descripcion',
-        'precio',
-        'imagen',
-        'disponibilidad',
-        'tipo_producto',
-        'id_categoria'
-    ];
+    protected $fillable = ['nombre', 'descripcion', 'precio', 'disponibilidad', 'tipo_producto', 'id_categoria'];
 
-    /**
-     * Relación con la categoría.
-     * Un producto pertenece a una categoría.
-     */
     public function categoria()
     {
-        return $this->belongsTo(Categoria::class, 'id_categoria');
+        return $this->belongsTo(Categoria::class, 'id_categoria', 'id_categoria');
+    }
+
+    public function detalles()
+    {
+        return $this->hasMany(DetallePedido::class, 'id_producto', 'id_producto');
     }
 }
