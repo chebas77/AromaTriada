@@ -11,10 +11,18 @@ class Tracking extends Model
     protected $table = 'tracking'; // Tabla tracking
     protected $primaryKey = 'id_tracking'; // Llave primaria
 
-    protected $fillable = ['id_pedido', 'origen', 'destino', 'estado_actual', 'fecha_despacho', 'fecha_entrega', 'hora_programada'];
+    protected $fillable = [
+        'id_venta', // Cambiar id_pedido por id_venta
+        'origen',
+        'destino',
+        'estado_actual',
+        'fecha_despacho',
+        'fecha_entrega',
+        'hora_programada',
+    ];
 
-    public function pedido()
+    public function venta()
     {
-        return $this->belongsTo(Pedido::class, 'id_pedido', 'id_pedido');
+        return $this->belongsTo(Venta::class, 'id_venta', 'id_pedido');
     }
 }

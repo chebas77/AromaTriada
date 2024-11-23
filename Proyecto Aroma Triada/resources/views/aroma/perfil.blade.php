@@ -56,7 +56,7 @@
           <h3 class="text-2xl font-bold mb-4">Información Personal</h3>
           @livewire('profile.update-profile-information-form')
         </div>
-
+      
         <!-- Order History Section -->
         <div id="order-history" class="bg-white shadow-lg rounded-lg p-6">
           <h3 class="text-2xl font-bold mb-4">Historial de Pedidos</h3>

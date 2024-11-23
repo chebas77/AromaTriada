@@ -14,9 +14,9 @@ class DetallePedido extends Model
 
     protected $fillable = ['id_pedido', 'id_producto', 'id_servicio', 'cantidad', 'precio_unitario', 'personalizacion'];
 
-    public function pedido()
+    public function venta()
     {
-        return $this->belongsTo(Pedido::class, 'id_pedido', 'id_pedido');
+        return $this->belongsTo(Venta::class, 'id_pedido', 'id_pedido');
     }
 
     public function producto()

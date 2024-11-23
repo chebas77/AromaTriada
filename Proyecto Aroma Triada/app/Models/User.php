@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -13,25 +12,7 @@ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable;
-
-    protected $table = 'users'; // Tabla users
-    protected $primaryKey = 'id'; // Llave primaria (por defecto en Laravel es "id")
-
- 
-
-    public function rol()
-    {
-        return $this->belongsTo(Rol::class, 'id_rol', 'id_rol');
-    }
-
-    public function pedidos()
-    {
-        return $this->hasMany(Pedido::class, 'id_usuario', 'id');
-    }
     use HasApiTokens;
-
-    /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory;
     use HasProfilePhoto;
     use HasTeams;
@@ -39,7 +20,21 @@ class User extends Authenticatable
     use TwoFactorAuthenticatable;
 
     /**
-     * The attributes that are mass assignable.
+     * La tabla asociada al modelo.
+     *
+     * @var string
+     */
+    protected $table = 'users'; // Tabla users
+
+    /**
+     * La llave primaria de la tabla.
+     *
+     * @var string
+     */
+    protected $primaryKey = 'id'; // Llave primaria (por defecto "id")
+
+    /**
+     * Atributos asignables masivamente.
      *
      * @var array<int, string>
      */
@@ -47,11 +42,11 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'id_rol',
+        'id_rol', // Campo de la relación con el rol
     ];
 
     /**
-     * The attributes that should be hidden for serialization.
+     * Atributos ocultos para la serialización.
      *
      * @var array<int, string>
      */
@@ -63,7 +58,7 @@ class User extends Authenticatable
     ];
 
     /**
-     * The accessors to append to the model's array form.
+     * Accesores que se agregarán a la representación del modelo.
      *
      * @var array<int, string>
      */
@@ -72,7 +67,7 @@ class User extends Authenticatable
     ];
 
     /**
-     * Get the attributes that should be cast.
+     * Los atributos que deben ser convertidos a tipos nativos.
      *
      * @return array<string, string>
      */
@@ -82,5 +77,25 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Relación: Un usuario pertenece a un rol.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function rol()
+    {
+        return $this->belongsTo(Rol::class, 'id_rol', 'id_rol');
+    }
+
+    /**
+     * Relación: Un usuario tiene muchos pedidos.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function pedidos()
+    {
+        return $this->hasMany(Pedido::class, 'id_usuario', 'id');
     }
 }

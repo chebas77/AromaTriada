@@ -27,7 +27,7 @@
                 <select name="cantidad" class="border rounded px-2 py-1" onchange="this.form.submit()">
                     @for ($i = 1; $i <= 5; $i++)
                         <option value="{{ $i }}" {{ $item['cantidad'] == $i ? 'selected' : '' }}>{{ $i }}</option>
-                        @endfor
+                    @endfor
                 </select>
             </form>
 
@@ -47,6 +47,7 @@
     <p>No hay productos en el carrito.</p>
     @endif
 
+    <!-- Servicios Disponibles -->
     <section class="container mx-auto py-12 px-6">
         <h2 class="text-2xl font-bold mt-12">Servicios Disponibles</h2>
         <form id="servicios-form" action="{{ route('carrito.agregarServicios') }}" method="POST">
@@ -65,64 +66,36 @@
                 </div>
                 @endforeach
             </div>
-            <button type="submit" class="bg-black text-white px-6 py-2 rounded-lg w-full mt-6">Agregar Servicios al Carrito</button>
-        </form>
-        <div class="mt-6 text-right">
-    <a href="{{ route('checkout') }}" class="bg-black text-white px-6 py-3 rounded-lg font-bold hover:bg-gray-800">
-        Ir a Pagar
-    </a>
-</div>
 
+            <!-- Botones para agregar servicios y confirmar carrito -->
+            <div class="flex justify-between items-center mt-6">
+                <!-- Botón para agregar servicios -->
+                <button type="submit" class="bg-blue-500 text-white px-6 py-2 rounded-lg">
+                    Agregar Servicios al Carrito
+                </button>
+            </div>
+        </form>
+
+        <!-- Botón para confirmar carrito -->
+        <div class="mt-6">
+            <form id="confirmar-carrito-form" action="{{ route('carrito.confirmar') }}" method="POST">
+                @csrf
+                <button type="submit" class="bg-red-600 text-white px-6 py-2 rounded-lg w-full">
+                    Confirmar Carrito
+                </button>
+            </form>
+        </div>
     </section>
 
     <script>
-        // Función para actualizar la cantidad de cada servicio
         function updateQuantity(id, delta) {
             const quantityInput = document.getElementById(`quantity-${id}`);
             const display = document.getElementById(`display-${id}`);
             let quantity = parseInt(quantityInput.value) + delta;
-
-            // Asegura que la cantidad no sea negativa
-            quantity = quantity < 0 ? 0 : quantity;
-
-            // Actualiza el valor en la interfaz y en el formulario
+            quantity = quantity < 0 ? 0 : quantity; // Asegura que la cantidad no sea negativa
             quantityInput.value = quantity;
             display.textContent = quantity;
-
-            // Actualiza el resumen del carrito
-            updateCartSummary();
-        }
-
-        function updateCartSummary() {
-            const resumenItems = document.getElementById("resumen-items");
-            const totalPrecioEl = document.getElementById("total-precio");
-
-            // Limpia los elementos del resumen
-            resumenItems.innerHTML = "";
-
-            let totalPrecio = 0;
-
-            // Itera sobre los servicios para calcular el total
-            document.querySelectorAll("input[id^='quantity-']").forEach(input => {
-                const id = input.id.split("-")[1];
-                const cantidad = parseInt(input.value);
-                const servicioPrecio = parseFloat(document.getElementById(`display-${id}`).textContent) || 0;
-
-                if (cantidad > 0) {
-                    // Suma el subtotal por cada servicio
-                    const subtotal = servicioPrecio * cantidad;
-                    totalPrecio += subtotal;
-
-                    // Agrega el servicio al resumen
-                    const item = document.createElement("li");
-                    item.classList.add("flex", "justify-between");
-                    item.innerHTML = `<span>Servicio ${id}</span><span>${cantidad} x $${servicioPrecio} = $${subtotal.toFixed(2)}</span>`;
-                    resumenItems.appendChild(item);
-                }
-            });
-
-            // Actualiza el total en el resumen
-            totalPrecioEl.textContent = `$${totalPrecio.toFixed(2)}`;
         }
     </script>
-    @endsection
+</section>
+@endsection

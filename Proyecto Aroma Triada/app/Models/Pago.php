@@ -13,8 +13,8 @@ class Pago extends Model
 
     protected $fillable = ['id_pedido', 'fecha_pago', 'monto', 'estado', 'metodo'];
 
-    public function pedido()
+    public function venta()
     {
-        return $this->belongsTo(Pedido::class, 'id_pedido', 'id_pedido');
+        return $this->belongsTo(Venta::class, 'id_pedido', 'id_pedido');
     }
 }

@@ -9,6 +9,7 @@
         <li><a href="{{ route('aroma.index') }}" class="hover:text-white">Inicio</a></li>
         <li><a href="{{ route('aroma.catalogo') }}" class="hover:text-white">Catálogo</a></li>
         <li><a href="{{ route('aroma.nosotros') }}" class="hover:text-white">Nosotros</a></li>
+        <li><a href="{{ route('tracking.mostrar') }}" class="hover:text-white">Tracking</a></li>
       </ul>
     </div>
 
