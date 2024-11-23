@@ -12,29 +12,24 @@ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasApiTokens;
-    use HasFactory;
-    use HasProfilePhoto;
-    use HasTeams;
-    use Notifiable;
-    use TwoFactorAuthenticatable;
+    use HasApiTokens, HasFactory, HasProfilePhoto, HasTeams, Notifiable, TwoFactorAuthenticatable;
 
     /**
      * La tabla asociada al modelo.
      *
      * @var string
      */
-    protected $table = 'users'; // Tabla users
+    protected $table = 'users'; // Nombre de la tabla
 
     /**
      * La llave primaria de la tabla.
      *
      * @var string
      */
-    protected $primaryKey = 'id'; // Llave primaria (por defecto "id")
+    protected $primaryKey = 'id'; // Llave primaria (por defecto en Laravel es "id")
 
     /**
-     * Atributos asignables masivamente.
+     * Campos que se pueden asignar masivamente.
      *
      * @var array<int, string>
      */
@@ -42,11 +37,11 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'id_rol', // Campo de la relación con el rol
+        'id_rol', // Campo que relaciona al rol
     ];
 
     /**
-     * Atributos ocultos para la serialización.
+     * Campos que se deben ocultar al serializar.
      *
      * @var array<int, string>
      */
@@ -58,7 +53,17 @@ class User extends Authenticatable
     ];
 
     /**
-     * Accesores que se agregarán a la representación del modelo.
+     * Atributos que deben ser convertidos a tipos nativos.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+    ];
+
+    /**
+     * Atributos adicionales que se agregarán a la representación del modelo.
      *
      * @var array<int, string>
      */
@@ -67,26 +72,13 @@ class User extends Authenticatable
     ];
 
     /**
-     * Los atributos que deben ser convertidos a tipos nativos.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
-    }
-
-    /**
      * Relación: Un usuario pertenece a un rol.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function rol()
     {
-        return $this->belongsTo(Rol::class, 'id_rol', 'id_rol');
+        return $this->belongsTo(Rol::class, 'id_rol', 'id_rol'); // Relación con la tabla 'roles'
     }
 
     /**
@@ -96,6 +88,27 @@ class User extends Authenticatable
      */
     public function pedidos()
     {
-        return $this->hasMany(Pedido::class, 'id_usuario', 'id');
+        return $this->hasMany(Pedido::class, 'id_usuario', 'id'); // Relación con la tabla 'pedidos'
+    }
+
+    /**
+     * Verifica si el usuario tiene el rol de Administrador.
+     *
+     * @return bool
+     */
+    public function esAdministrador(): bool
+    {
+        return $this->rol && $this->rol->nombre === 'Administrador';
+    }
+
+    /**
+     * Verifica si el usuario tiene un rol específico.
+     *
+     * @param string $nombreRol
+     * @return bool
+     */
+    public function tieneRol(string $nombreRol): bool
+    {
+        return $this->rol && $this->rol->nombre === $nombreRol;
     }
 }
