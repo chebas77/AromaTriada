@@ -13,33 +13,13 @@ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, HasProfilePhoto, HasTeams, Notifiable, TwoFactorAuthenticatable;
 
-    protected $table = 'users'; // Tabla users
+    protected $table = 'users'; // Nombre de la tabla
     protected $primaryKey = 'id'; // Llave primaria (por defecto en Laravel es "id")
 
- 
-
-    public function rol()
-    {
-        return $this->belongsTo(Rol::class, 'id_rol', 'id_rol');
-    }
-
-    public function pedidos()
-    {
-        return $this->hasMany(Pedido::class, 'id_usuario', 'id');
-    }
-    use HasApiTokens;
-
-    /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory;
-    use HasProfilePhoto;
-    use HasTeams;
-    use Notifiable;
-    use TwoFactorAuthenticatable;
-
     /**
-     * The attributes that are mass assignable.
+     * Campos que se pueden asignar masivamente.
      *
      * @var array<int, string>
      */
@@ -47,11 +27,11 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'id_rol',
+        'id_rol', // Relación con roles
     ];
 
     /**
-     * The attributes that should be hidden for serialization.
+     * Campos que se deben ocultar al serializar.
      *
      * @var array<int, string>
      */
@@ -63,16 +43,7 @@ class User extends Authenticatable
     ];
 
     /**
-     * The accessors to append to the model's array form.
-     *
-     * @var array<int, string>
-     */
-    protected $appends = [
-        'profile_photo_url',
-    ];
-
-    /**
-     * Get the attributes that should be cast.
+     * Atributos que deben ser convertidos.
      *
      * @return array<string, string>
      */
@@ -82,5 +53,42 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Relación: un usuario pertenece a un rol.
+     */
+    public function rol()
+    {
+        return $this->belongsTo(Rol::class, 'id_rol', 'id_rol'); // Relación con 'roles.id_rol'
+    }
+
+    /**
+     * Relación: un usuario puede tener muchos pedidos.
+     */
+    public function pedidos()
+    {
+        return $this->hasMany(Pedido::class, 'id_usuario', 'id');
+    }
+
+    /**
+     * Verifica si el usuario tiene el rol de Administrador.
+     *
+     * @return bool
+     */
+    public function esAdministrador(): bool
+    {
+        return $this->rol && $this->rol->nombre === 'Administrador';
+    }
+
+    /**
+     * Verifica si el usuario tiene un rol específico.
+     *
+     * @param string $nombreRol
+     * @return bool
+     */
+    public function tieneRol(string $nombreRol): bool
+    {
+        return $this->rol && $this->rol->nombre === $nombreRol;
     }
 }

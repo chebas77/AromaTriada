@@ -9,28 +9,28 @@ class Rol extends Model
 {
     use HasFactory;
 
-    protected $table = 'pedidos'; // Tabla pedidos (o 'ventas' si ya renombraste)
-    protected $primaryKey = 'id_pedido'; // Llave primaria
+    // Configuración actualizada para la tabla roles
+    protected $table = 'roles'; // Nombre de la tabla
+    protected $primaryKey = 'id_rol'; // Llave primaria es 'id_rol'
+    public $incrementing = true; // Indica que la llave primaria es incremental
+    protected $keyType = 'int'; // Tipo de dato de la llave primaria
 
-    protected $fillable = ['fecha', 'estado', 'total', 'id_usuario'];
+    protected $fillable = ['nombre', 'descripcion']; // Campos que se pueden asignar masivamente
 
-    public function user()
+    // Relación con usuarios
+    public function usuarios()
     {
-        return $this->belongsTo(User::class, 'id_usuario', 'id');
+        return $this->hasMany(User::class, 'id_rol', 'id_rol'); // Relación ajustada para usar 'id_rol'
     }
 
-    public function detalles()
+    // Funciones adicionales para verificar roles específicos
+    public function esAdministrador(): bool
     {
-        return $this->hasMany(DetallePedido::class, 'id_pedido', 'id_pedido');
+        return $this->nombre === 'Administrador';
     }
 
-    public function tracking()
+    public function esUsuario(): bool
     {
-        return $this->hasOne(Tracking::class, 'id_pedido', 'id_pedido');
-    }
-
-    public function pago()
-    {
-        return $this->hasOne(Pago::class, 'id_pedido', 'id_pedido');
+        return $this->nombre === 'Usuario';
     }
 }

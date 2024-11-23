@@ -4,10 +4,8 @@ use App\Http\Controllers\AromaController;
 use App\Http\Controllers\CarritoController;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\PaymentController;
-use App\Http\Controllers\AdminController; // Agregado para el CRUD de productos
-
+use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
-
 
 Route::get('/checkout', [PaymentController::class, 'checkout'])->name('checkout');
 Route::get('/payment/success', [PaymentController::class, 'success'])->name('payment.success');
@@ -46,19 +44,57 @@ Route::prefix('aroma')->controller(AromaController::class)->group(function () {
 
 // Grupo de rutas protegidas por autenticación
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(function () {
-    Route::get('/dashboard', [AromaController::class, 'index'])->name('dashboard'); // Redirecciona a la vista de inicio
+    Route::get('/dashboard', function () {
+        $user = auth()->user();
+
+        // Redirige al administrador al panel de administración
+        if ($user->rol->nombre === 'Administrador') {
+            return redirect('/admin'); // Redirige al panel de administración
+        }
+
+        // Redirige a usuarios normales al dashboard
+        return view('dashboard'); // Vista predeterminada del dashboard
+    })->name('dashboard');
 
     Route::get('/perfil', function () {
         return view('perfil'); // Asegúrate de que esta vista apunta correctamente a la vista de perfil
     })->name('perfil');
 
-    // Rutas para la gestión de productos en el administrador
+    // Grupo de rutas protegidas para administradores
     Route::prefix('admin')->group(function () {
+        // Página principal del panel de administración
+        Route::get('/', [AdminController::class, 'index'])->name('admin.index');
+
+        // Gestión de productos
         Route::get('productos', [AdminController::class, 'gestionarProductos'])->name('admin.gestionarProductos');
-        Route::get('productos/crear', [AdminController::class, 'crearProducto'])->name('admin.crearProducto');
-        Route::post('productos', [AdminController::class, 'guardarProducto'])->name('admin.guardarProducto');
+        Route::get('productos/crear', [AdminController::class, 'crearProducto'])->name('admin.crearProducto'); // NUEVA RUTA
+        Route::post('productos', [AdminController::class, 'guardarProducto'])->name('admin.guardarProducto'); // NUEVA RUTA
         Route::get('productos/{producto}/editar', [AdminController::class, 'editarProducto'])->name('admin.editarProducto');
         Route::put('productos/{producto}', [AdminController::class, 'actualizarProducto'])->name('admin.actualizarProducto');
         Route::delete('productos/{producto}', [AdminController::class, 'eliminarProducto'])->name('admin.eliminarProducto');
+
+        
+        // Gestión de servicios
+    Route::prefix('admin')->group(function () {
+        Route::get('servicios', [AdminController::class, 'gestionarServicios'])->name('admin.gestionarServicios');
+        Route::get('servicios/crear', [AdminController::class, 'crearServicio'])->name('admin.crearServicio'); // NUEVA RUTA
+        Route::post('servicios', [AdminController::class, 'guardarServicio'])->name('admin.guardarServicio'); // NUEVA RUTA
+        Route::get('servicios/{servicio}/editar', [AdminController::class, 'editarServicio'])->name('admin.editarServicio');
+        Route::put('servicios/{servicio}', [AdminController::class, 'actualizarServicio'])->name('admin.actualizarServicio');
+        Route::delete('servicios/{servicio}', [AdminController::class, 'eliminarServicio'])->name('admin.eliminarServicio');
+});
+
+
+        // Gestión de usuarios
+        Route::get('admin/usuarios', [AdminController::class, 'gestionarUsuarios'])->name('admin.gestionarUsuarios');
+        Route::post('usuarios/{usuario}/actualizar', [AdminController::class, 'actualizarUsuario'])->name('admin.actualizarUsuario');
+        Route::get('usuarios/{usuario}/editar', [AdminController::class, 'editarUsuario'])->name('admin.editarUsuario');
+        Route::put('usuarios/{usuario}', [AdminController::class, 'actualizarUsuario'])->name('admin.actualizarUsuario');
+
+
+
+
+        // Visualización de ventas/pedidos
+        Route::get('ventas', [AdminController::class, 'verPedidos'])->name('admin.verPedidos');
     });
 });
