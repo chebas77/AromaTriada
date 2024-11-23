@@ -1,4 +1,4 @@
-@extends('layouts.app') {{-- Usa el layout principal de Jetstream --}}
+@extends('recursos.app')
 
 @section('content')
 <div class="container mx-auto px-4 py-6">
@@ -42,5 +42,9 @@
         </div>
     </form>
 </div>
+<a href="{{ url()->previous() }}" class="bg-gray-500 text-white px-4 py-2 rounded mb-4 inline-block">
+    Regresar
+</a>
+
 @endsection
     

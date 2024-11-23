@@ -6,7 +6,7 @@ use App\Models\Rol;
 use App\Models\User;
 use App\Models\Producto;
 use App\Models\Servicio;
-use App\Models\Pedido;
+use App\Models\Venta;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
@@ -207,8 +207,8 @@ class AdminController extends Controller
 {
     $this->verificarAdministrador(); // Verifica si el usuario es administrador
 
-    $pedidos = Pedido::all(); // Obtiene todos los pedidos
-    return view('admin.ventas-index', compact('pedidos')); // Retorna la vista de gestión de ventas con los pedidos
+    $ventas = Venta::all(); // Obtiene todas las ventas
+    return view('admin.ventas-index', compact('ventas')); // Retorna la vista de gestión de ventas con las ventas
 }
 
 

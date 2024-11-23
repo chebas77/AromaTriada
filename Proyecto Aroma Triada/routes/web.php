@@ -5,9 +5,34 @@ use App\Http\Controllers\CarritoController;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\TrackingController; // Para el tracking
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
+
+// Ruta principal
+Route::get('/', [AromaController::class, 'index'])->name('aroma.index');
+
+// Rutas del catálogo
+Route::prefix('catalogo')->group(function () {
+    Route::get('/', [AromaController::class, 'catalogo'])->name('aroma.catalogo');
+    Route::get('/detalle/{tipo}/{id}', [AromaController::class, 'mostrarDetalle'])->name('detalle.mostrar');
+});
+
+// Rutas del carrito
+Route::prefix('carrito')->group(function () {
+    Route::get('/', [CarritoController::class, 'mostrarCarrito'])->name('carrito.mostrar');
+    Route::post('/agregar', [CarritoController::class, 'agregar'])->name('carrito.agregar');
+    Route::post('/agregar-servicios', [CarritoController::class, 'agregarServicios'])->name('carrito.agregarServicios');
+    Route::post('/confirmar', [CarritoController::class, 'confirmarCarrito'])->name('carrito.confirmar');
+    Route::patch('/actualizar', [CarritoController::class, 'actualizarCantidad'])->name('carrito.actualizar');
+    Route::delete('/eliminar', [CarritoController::class, 'eliminar'])->name('carrito.eliminar');
+    Route::post('/personalizar-entrega', [CarritoController::class, 'personalizarEntrega'])->name('carrito.personalizarEntrega');
+    Route::get('/confirmado', [CarritoController::class, 'mostrarCarritoConfirmado'])->name('carrito.confirmado');
+});
+
+// Rutas de servicios
+Route::get('/servicios', [CarritoController::class, 'mostrarServicios'])->name('servicios.mostrar');
 
 // Rutas de pago
 Route::middleware(['auth'])->prefix('payment')->group(function () {
@@ -16,26 +41,10 @@ Route::middleware(['auth'])->prefix('payment')->group(function () {
     Route::get('/cancel', [PaymentController::class, 'cancel'])->name('payment.cancel');
 });
 
-// Rutas del catálogo y detalle del producto
-Route::prefix('catalogo')->group(function () {
-    Route::get('/', [ProductoController::class, 'catalogo'])->name('aroma.catalogo');
-    Route::get('/detalle/{tipo}/{id}', [ProductoController::class, 'mostrarDetalle'])->name('detalle.mostrar');
+// Rutas para el tracking
+Route::middleware(['auth'])->prefix('tracking')->group(function () {
+    Route::get('/', [TrackingController::class, 'mostrar'])->name('tracking.mostrar');
 });
-
-// Rutas del carrito
-Route::prefix('carrito')->group(function () {
-    Route::get('/', [CarritoController::class, 'mostrarCarrito'])->name('carrito.mostrar');
-    Route::post('/agregar', [CarritoController::class, 'agregar'])->name('carrito.agregar');
-    Route::post('/agregar-servicios', [CarritoController::class, 'agregarServicios'])->name('carrito.agregarServicios');
-    Route::patch('/actualizar', [CarritoController::class, 'actualizarCantidad'])->name('carrito.actualizar');
-    Route::delete('/eliminar', [CarritoController::class, 'eliminar'])->name('carrito.eliminar');
-});
-
-// Rutas de servicios
-Route::get('/servicios', [CarritoController::class, 'mostrarServicios'])->name('servicios.mostrar');
-
-// Ruta principal (index)
-Route::get('/', [AromaController::class, 'index'])->name('aroma.index');
 
 // Grupo de rutas para el controlador AromaController
 Route::prefix('aroma')->controller(AromaController::class)->group(function () {
@@ -52,22 +61,14 @@ Route::prefix('aroma')->controller(AromaController::class)->group(function () {
 // Grupo de rutas protegidas por autenticación
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(function () {
     Route::get('/dashboard', function () {
-        $user = Auth::user();
-
-
-        // Redirige al administrador al panel de administración
-        if ($user->rol->nombre === 'Administrador') {
-            return redirect('/admin'); // Redirige al panel de administración
-        }
-
-        // Redirige a usuarios normales al dashboard
-        return view('dashboard'); // Vista predeterminada del dashboard
-    })->name('dashboard');
+        return redirect()->route('aroma.index'); // Redirige siempre a la página principal
+    });
 
     Route::get('/perfil', function () {
-        return view('perfil'); // Asegúrate de que esta vista apunta correctamente a la vista de perfil
+        return view('perfil'); // Mantiene la lógica para el perfil
     })->name('perfil');
 });
+
 
 // Grupo de rutas protegidas para administradores
 Route::prefix('admin')->middleware(['auth'])->group(function () {

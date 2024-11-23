@@ -1,4 +1,4 @@
-@extends('layouts.app') {{-- Asegúrate de usar tu layout principal --}}
+@extends('recursos.app')
 
 @section('content')
 <div class="container">
@@ -11,4 +11,8 @@
         <li><a href="{{ route('admin.verPedidos') }}">Gestionar Ventas/Pedidos</a></li>
     </ul>
 </div>
+<a href="{{ url()->previous() }}" class="bg-gray-500 text-white px-4 py-2 rounded mb-4 inline-block">
+    Regresar
+</a>
+
 @endsection

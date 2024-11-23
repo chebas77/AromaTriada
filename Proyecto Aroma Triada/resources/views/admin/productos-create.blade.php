@@ -11,4 +11,8 @@
     <input type="number" id="precio" name="precio" required step="0.01">
 
     <button type="submit">Guardar</button>
+    <a href="{{ url()->previous() }}" class="bg-gray-500 text-white px-4 py-2 rounded mb-4 inline-block">
+    Regresar
+</a>
+
 </form>

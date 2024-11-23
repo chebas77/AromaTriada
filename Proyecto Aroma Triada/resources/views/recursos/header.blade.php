@@ -33,8 +33,21 @@
 
     <!-- Sección de Iniciar Sesión / Registrarse alineada a la derecha -->
     <div class="w-full py-4 px-6 text-sm text-gray-500 text-right">
-      <a href="{{ route('aroma.inicioSesion') }}" class="hover:underline">Iniciar Sesión</a> /
-      <a href="{{ route('aroma.registro') }}" class="hover:underline">Registrarse</a>
+      @if(auth()->check())
+        {{-- Si el usuario está autenticado y es administrador, muestra el enlace al panel de administración --}}
+        @if(auth()->user()->esAdministrador())
+          <a href="{{ route('admin.index') }}" class="hover:underline text-white">Panel de Administración</a> |
+        @endif
+        {{-- Muestra un enlace para cerrar sesión --}}
+        <form action="{{ route('logout') }}" method="POST" style="display: inline;">
+          @csrf
+          <button type="submit" class="hover:underline text-white">Cerrar Sesión</button>
+        </form>
+      @else
+        {{-- Enlace de inicio de sesión y registro para usuarios no autenticados --}}
+        <a href="{{ route('aroma.inicioSesion') }}" class="hover:underline">Iniciar Sesión</a> /
+        <a href="{{ route('aroma.registro') }}" class="hover:underline">Registrarse</a>
+      @endif
     </div>
   </header>
 </div>
