@@ -1,54 +1,66 @@
-@extends('recursos.app')
+@extends('recursos.base_admin')
+@section('title', 'Editar Usuario')
 
 @section('content')
-<div class="container mx-auto px-4 py-6">
-    <h1 class="text-2xl font-bold mb-4">Editar Usuario</h1>
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-2xl font-bold mb-6">Editar Usuario</h1>
 
     {{-- Formulario para editar el usuario --}}
-    <form action="{{ route('admin.actualizarUsuario', $usuario->id) }}" method="POST" class="max-w-lg mx-auto bg-white shadow-md rounded px-8 py-6">
-        @csrf
+    <form action="{{ route('admin.actualizarUsuario', $usuario->id) }}" method="POST" class="bg-white rounded-lg shadow-md p-6 space-y-4 max-w-lg mx-auto">
+        @csrf {{-- Token de seguridad --}}
         {{-- No incluimos @method('PUT') porque usamos POST --}}
-
-        {{-- Campo para el nombre --}}
-        <div class="mb-4">
-            <label for="name" class="block text-gray-700 font-bold mb-2">Nombre</label>
-            <input type="text" name="name" id="name" value="{{ $usuario->name }}" 
-                class="w-full border rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+        
+        <!-- Campo para el nombre -->
+        <div>
+            <label for="name" class="block text-gray-700 font-bold mb-2">Nombre:</label>
+            <input type="text" name="name" id="name" value="{{ old('name', $usuario->name) }}" 
+                   class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            @error('name')
+            <span class="text-red-500 text-sm">{{ $message }}</span>
+            @enderror
         </div>
 
-        {{-- Campo para el correo electrónico --}}
-        <div class="mb-4">
-            <label for="email" class="block text-gray-700 font-bold mb-2">Correo electrónico</label>
-            <input type="email" name="email" id="email" value="{{ $usuario->email }}" 
-                class="w-full border rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <!-- Campo para el correo electrónico -->
+        <div>
+            <label for="email" class="block text-gray-700 font-bold mb-2">Correo Electrónico:</label>
+            <input type="email" name="email" id="email" value="{{ old('email', $usuario->email) }}" 
+                   class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            @error('email')
+            <span class="text-red-500 text-sm">{{ $message }}</span>
+            @enderror
         </div>
 
-        {{-- Campo para el rol --}}
-        <div class="mb-4">
-            <label for="id_rol" class="block text-gray-700 font-bold mb-2">Rol</label>
+        <!-- Campo para el rol -->
+        <div>
+            <label for="id_rol" class="block text-gray-700 font-bold mb-2">Rol:</label>
             <select name="id_rol" id="id_rol" 
-                class="w-full border rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
                 @foreach($roles as $rol)
-                    <option value="{{ $rol->id_rol }}" {{ $usuario->id_rol == $rol->id_rol ? 'selected' : '' }}>
+                    <option value="{{ $rol->id_rol }}" {{ old('id_rol', $usuario->id_rol) == $rol->id_rol ? 'selected' : '' }}>
                         {{ $rol->nombre }}
                     </option>
                 @endforeach
             </select>
+            @error('id_rol')
+            <span class="text-red-500 text-sm">{{ $message }}</span>
+            @enderror
         </div>
 
-        {{-- Botón para confirmar cambios --}}
+        <!-- Botón para guardar cambios -->
         <div class="flex justify-end">
             <button type="submit" 
-                class="bg-red-600 text-white px-6 py-2 rounded hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500">
+                    class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
                 Guardar Cambios
             </button>
         </div>
     </form>
 </div>
 
-{{-- Botón para regresar a la página anterior --}}
-<a href="{{  route('admin.index') }}" 
-    class="bg-gray-500 text-white px-4 py-2 rounded mb-4 inline-block hover:bg-gray-600">
-    Regresar
-</a>
+{{-- Botón para regresar --}}
+<div class="mt-6 text-center">
+    <a href="{{ route('admin.gestionarUsuarios') }}" 
+       class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500">
+        Regresar
+    </a>
+</div>
 @endsection

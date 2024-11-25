@@ -6,7 +6,11 @@ use App\Models\Rol;
 use App\Models\User;
 use App\Models\Producto;
 use App\Models\Servicio;
+use App\Models\Categoria;
+use Illuminate\Support\Facades\Storage;
+
 use App\Models\Venta;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
@@ -18,22 +22,46 @@ class AdminController extends Controller
             abort(403, 'Acceso no autorizado');
         }
     }
-
+    
     // Página principal del panel de administración
     public function index()
     {
+        $connectedUsers = DB::table('sessions')->whereNotNull('user_id')->count();
+        $totalSales = DB::table('venta')->count();
+        $newUsers = DB::table('users')->count();
+    
+        // Datos para el gráfico de cantidad de ventas
+        $salesData = DB::table('venta')
+            ->selectRaw('MONTH(fecha) as month, COUNT(*) as total_sales')
+            ->groupBy('month')
+            ->orderBy('month')
+            ->get();
+    
+        // Convertir los datos para el gráfico
+        $salesMonths = $salesData->pluck('month')->map(function ($month) {
+            return date('F', mktime(0, 0, 0, $month, 1)); // Convertir números de mes a nombres
+        });
+    
+        $salesTotals = $salesData->pluck('total_sales');
         $this->verificarAdministrador();
-        return view('admin.indexadmin'); // Muestra la vista principal del panel de administración
+        return view('admin.indexadmin', compact('connectedUsers', 'totalSales', 'newUsers', 'salesMonths', 'salesTotals'));
     }
 
     // Gestiona los productos en el sistema
-    public function gestionarProductos()
-    {
-        $this->verificarAdministrador(); // Verifica que el usuario sea administrador
+    public function gestionarProductos(Request $request)
+{
+    $categorias = Categoria::all(); // Obtener todas las categorías
+    $productosQuery = Producto::with('categoria');
 
-        $productos = Producto::all(); // Obtiene todos los productos
-        return view('admin.productos-index', compact('productos')); // Retorna la vista con los productos
+    // Si hay un filtro de categoría, aplicarlo
+    if ($request->has('categoria') && $request->categoria != '') {
+        $productosQuery->where('id_categoria', $request->categoria);
     }
+
+    $productos = $productosQuery->get();
+
+    return view('admin.productos-index', compact('productos', 'categorias'));
+}
     // Vista para editar un producto
     public function editarProducto(Producto $producto)
     {
@@ -65,44 +93,58 @@ class AdminController extends Controller
     // Vista para guardar un producto
 
     public function guardarProducto(Request $request)
-    {
-        $this->verificarAdministrador(); // Asegúrate de verificar que sea un administrador
+{
+    $this->verificarAdministrador();
 
+    // Validar los datos
+    $validated = $request->validate([
+        'nombre' => 'required|max:255',
+        'descripcion' => 'nullable',
+        'precio' => 'required|numeric|min:0',
+        'imagen' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+    ]);
 
-        // Validar los datos enviados desde el formulario
-        $validated = $request->validate([
-            'nombre' => 'required|max:255',         // El nombre es obligatorio y tiene un máximo de 255 caracteres
-            'descripcion' => 'nullable',            // La descripción puede ser nula
-            'precio' => 'required|numeric|min:0',   // El precio es obligatorio, numérico y mayor o igual a 0
-        ]);
-
-        // Crear un nuevo producto con los datos validados
-        Producto::create($validated);
-
-        // Redirigir al listado de productos con un mensaje de éxito
-        return redirect()->route('admin.gestionarProductos')->with('success', 'Producto creado con éxito.');
+    if ($request->hasFile('imagen')) {
+        $filePath = $request->file('imagen')->store('imagenes_productos', 'public');
+        $validated['imagen'] = $filePath;
     }
+
+    Producto::create($validated);
+
+    return redirect()->route('admin.gestionarProductos')->with('success', 'Producto creado con éxito.');
+}
 
     // Vista para actualizar un producto
 
     public function actualizarProducto(Request $request, Producto $producto)
-    {
-        $this->verificarAdministrador(); // Verifica que sea administrador
+{
+    $request->validate([
+        'nombre' => 'required|max:255',
+        'descripcion' => 'nullable',
+        'precio' => 'required|numeric|min:0',
+        'imagen' => 'nullable|image|mimes:jpg,png,jpeg,gif|max:2048', // Validación de imagen
+    ]);
 
-        // Validación de los datos enviados
-        $validated = $request->validate([
-            'nombre' => 'required|max:255',
-            'descripcion' => 'nullable',
-            'precio' => 'required|numeric|min:0',
-        ]);
+    // Eliminar la imagen anterior si se carga una nueva
+    if ($request->hasFile('imagen')) {
+        if ($producto->imagen && Storage::disk('public')->exists($producto->imagen)) {
+            Storage::disk('public')->delete($producto->imagen); // Eliminar la imagen anterior
+        }
 
-        // Actualiza el producto con los datos validados
-        $producto->update($validated);
-
-        // Redirige al listado de productos con un mensaje de éxito
-        return redirect()->route('admin.gestionarProductos')->with('success', 'Producto actualizado con éxito.');
+        // Almacenar la nueva imagen
+        $rutaImagen = $request->file('imagen')->store('images', 'public');
+        $producto->imagen = $rutaImagen;
     }
 
+    $producto->update([
+        'nombre' => $request->input('nombre'),
+        'descripcion' => $request->input('descripcion'),
+        'precio' => $request->input('precio'),
+        'imagen' => $producto->imagen, // Asegúrate de actualizar la imagen
+    ]);
+
+    return redirect()->route('admin.gestionarProductos')->with('success', 'Producto actualizado con éxito.');
+}
 
     // Gestiona los servicios en el sistema
     public function gestionarServicios()
@@ -172,13 +214,19 @@ class AdminController extends Controller
         return redirect()->route('admin.gestionarServicios')->with('success', 'Servicio eliminado con éxito.');
     }
 
-    public function gestionarUsuarios()
-    {
-        $this->verificarAdministrador(); // Verifica que el usuario sea administrador
+    public function gestionarUsuarios(Request $request)
+{
+    $query = User::query();
 
-        $usuarios = User::all(); // Obtén todos los usuarios
-        return view('admin.usuarios-index', compact('usuarios')); // Retorna la vista con los usuarios
+    // Filtrar por nombre si se proporciona un valor
+    if ($request->has('nombre') && $request->nombre != '') {
+        $query->where('name', 'like', '%' . $request->nombre . '%');
     }
+
+    $usuarios = $query->with('rol')->get(); // Asegúrate de que 'rol' sea la relación correcta
+
+    return view('admin.usuarios-index', compact('usuarios'));
+}
 
     public function editarUsuario(User $usuario)
     {
@@ -189,28 +237,40 @@ class AdminController extends Controller
     }
 
     public function actualizarUsuario(Request $request, User $usuario)
-{
-    $this->verificarAdministrador(); // Verifica que el usuario sea administrador
+    {
+        $this->verificarAdministrador(); // Verifica que el usuario sea administrador
 
-    // Valida los datos enviados
-    $validated = $request->validate([
-        'name' => 'required|max:255',
-        'email' => 'required|email|unique:users,email,' . $usuario->id,
-        'id_rol' => 'required|exists:roles,id_rol', // Validamos que el rol exista
-    ]);
+        // Valida los datos enviados
+        $validated = $request->validate([
+            'name' => 'required|max:255',
+            'email' => 'required|email|unique:users,email,' . $usuario->id,
+            'id_rol' => 'required|exists:roles,id_rol', // Validamos que el rol exista
+        ]);
 
-    // Actualiza el usuario con los datos validados
-    $usuario->update($validated);
+        // Actualiza el usuario con los datos validados
+        $usuario->update($validated);
 
-    // Redirige a la lista de usuarios con un mensaje de éxito
-    return redirect()->route('admin.gestionarUsuarios')->with('success', 'Usuario actualizado con éxito.');
-}
+        // Redirige a la lista de usuarios con un mensaje de éxito
+        return redirect()->route('admin.gestionarUsuarios')->with('success', 'Usuario actualizado con éxito.');
+    }
 
-public function verPedidos()
-{
-    $this->verificarAdministrador(); // Verifica si el usuario es administrador
+    public function verPedidos(Request $request)
+    {
+        $this->verificarAdministrador(); // Verifica si el usuario es administrador
+// Obtener el término de búsqueda
+$search = $request->input('search');
 
-    $ventas = Venta::all(); // Obtiene todas las ventas
-    return view('admin.ventas-index', compact('ventas')); // Retorna la vista correcta
-}
+// Consulta para filtrar las ventas por usuario
+$ventas = Venta::with('usuario')
+    ->when($search, function ($query, $search) {
+        return $query->whereHas('usuario', function ($query) use ($search) {
+            $query->where('name', 'like', '%' . $search . '%');
+        });
+    })
+    ->orderByDesc('fecha') // Ordenar desde la última venta
+    ->paginate(10); // Mostrar 10 ventas por página
+
+return view('admin.ventas-index', compact('ventas'));
+    }
+    
 }

@@ -114,7 +114,7 @@ class PaymentController extends Controller
             'id_venta' => $venta->id_pedido, // Usar el nombre correcto de la llave primaria en 'venta'
             'origen' => 'Almacén central',
             'destino' => $usuario->direccion ?? 'Dirección no especificada',
-            'estado_actual' => 'Preparando envío',
+            'estado_actual' => 'En proceso',
             'fecha_despacho' => null,
             'fecha_entrega' => null,
         ]);

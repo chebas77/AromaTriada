@@ -12,7 +12,7 @@ class Tracking extends Model
     protected $primaryKey = 'id_tracking'; // Llave primaria
 
     protected $fillable = [
-        'id_venta', // Cambiar id_pedido por id_venta
+        'id_venta', // Clave foránea hacia venta
         'origen',
         'destino',
         'estado_actual',
@@ -20,6 +20,21 @@ class Tracking extends Model
         'fecha_entrega',
         'hora_programada',
     ];
+
+    protected $casts = [
+        'fecha_despacho' => 'datetime',
+        'fecha_entrega' => 'datetime',
+    ];
+
+    const ESTADOS = ['En proceso', 'Enviado', 'Entregado', 'Cancelado'];
+
+    public function setEstadoActualAttribute($value)
+    {
+        if (!in_array($value, self::ESTADOS)) {
+            throw new \InvalidArgumentException("Estado no válido.");
+        }
+        $this->attributes['estado_actual'] = $value;
+    }
 
     public function venta()
     {

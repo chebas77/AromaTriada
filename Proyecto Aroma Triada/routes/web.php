@@ -5,9 +5,11 @@ use App\Http\Controllers\CarritoController;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\UsuarioController; 
 use App\Http\Controllers\TrackingController; // Para el tracking
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+
 
 
 // Ruta principal
@@ -95,7 +97,17 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::get('usuarios', [AdminController::class, 'gestionarUsuarios'])->name('admin.gestionarUsuarios');
     Route::post('usuarios/{usuario}/actualizar', [AdminController::class, 'actualizarUsuario'])->name('admin.actualizarUsuario');
     Route::get('usuarios/{usuario}/editar', [AdminController::class, 'editarUsuario'])->name('admin.editarUsuario');
+    Route::get('/admin/productos', [AdminController::class, 'gestionarProductos'])->name('admin.gestionarProductos');
 
     // Visualización de ventas/pedidos
     Route::get('ventas', [AdminController::class, 'verPedidos'])->name('admin.verPedidos');
+
+    Route::prefix('admin')->middleware(['auth'])->group(function () {
+        Route::get('/admin/tracking', [TrackingController::class, 'index'])->name('admin.tracking.index');
+
+       Route::get('/admin/tracking/{id}', [TrackingController::class, 'gestionarTracking'])->name('admin.tracking.show');
+Route::post('/admin/tracking/{id}', [TrackingController::class, 'updateTracking'])->name('admin.tracking.update');
+Route::post('/admin/tracking/{id}/despacho', [TrackingController::class, 'confirmarDespacho'])->name('admin.tracking.despacho');
+
+    });
 });

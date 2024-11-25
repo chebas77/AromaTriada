@@ -1,48 +1,66 @@
-@extends('recursos.app')
+@extends('recursos.base_admin')
+@section('title', 'Gestión de Usuarios')
 
 @section('content')
 <div class="container mx-auto px-4 py-6">
-    <h1 class="text-2xl font-bold mb-6">Gestión de Usuarios</h1>
+    <h1 class="text-2xl font-bold mb-4">Gestión de Usuarios</h1>
 
-    {{-- Mensaje de éxito --}}
-    @if (session('success'))
-        <div class="bg-green-100 text-green-700 p-4 rounded mb-4">
-            {{ session('success') }}
+    <!-- Filtro por nombre -->
+    <form action="{{ route('admin.gestionarUsuarios') }}" method="GET" class="mb-6">
+        <div class="flex space-x-4">
+            <input 
+                type="text" 
+                name="search" 
+                value="{{ request('search') }}" 
+                placeholder="Buscar por nombre de usuario" 
+                class="w-full px-4 py-2 border rounded focus:ring-2 focus:ring-blue-500"
+            >
+            <button 
+                type="submit" 
+                class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 focus:outline-none">
+                Buscar
+            </button>
+            <a 
+                href="{{ route('admin.gestionarUsuarios') }}" 
+                class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 focus:outline-none">
+                Restablecer
+            </a>
         </div>
-    @endif
+    </form>
 
-    {{-- Tabla de usuarios --}}
-    <div class="overflow-x-auto">
-        <table class="table-auto w-full border-collapse border border-gray-300">
+    <!-- Tabla de usuarios -->
+    <div class="overflow-x-auto bg-white shadow-md rounded-lg">
+        <table class="w-full border-collapse border border-gray-300">
             <thead>
-                <tr>
-                    <th class="border px-4 py-2 bg-gray-100">Nombre</th>
-                    <th class="border px-4 py-2 bg-gray-100">Correo Electrónico</th>
-                    <th class="border px-4 py-2 bg-gray-100">Rol</th>
-                    <th class="border px-4 py-2 bg-gray-100">Acción</th>
+                <tr class="bg-gray-200 text-left">
+                    <th class="px-4 py-2 border">ID</th>
+                    <th class="px-4 py-2 border">Nombre</th>
+                    <th class="px-4 py-2 border">Correo Electrónico</th>
+                    <th class="px-4 py-2 border">Rol</th>
+                    <th class="px-4 py-2 border">Acción</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach ($usuarios as $usuario)
-                <tr>
-                    <td class="border px-4 py-2">{{ $usuario->name }}</td>
-                    <td class="border px-4 py-2">{{ $usuario->email }}</td>
-                    <td class="border px-4 py-2">
-                        {{ $usuario->rol ? $usuario->rol->nombre : 'Sin Rol' }}
-                    </td>
-                    <td class="border px-4 py-2 text-center">
-                        {{-- Botón de Editar --}}
-                        <a href="{{ route('admin.editarUsuario', $usuario) }}" 
-                           class="bg-yellow-500 text-white px-2 py-1 rounded">Editar</a>
-                    </td>
-                </tr>
-                @endforeach
+                @forelse ($usuarios as $usuario)
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-4 py-2 border">{{ $usuario->id }}</td>
+                        <td class="px-4 py-2 border">{{ $usuario->name }}</td>
+                        <td class="px-4 py-2 border">{{ $usuario->email }}</td>
+                        <td class="px-4 py-2 border">{{ $usuario->rol->nombre ?? 'Sin Rol' }}</td>
+                        <td class="px-4 py-2 border">
+                            <a href="{{ route('admin.editarUsuario', $usuario->id) }}" 
+                               class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">
+                                Editar
+                            </a>
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="5" class="text-center py-4">No se encontraron usuarios.</td>
+                    </tr>
+                @endforelse
             </tbody>
         </table>
     </div>
 </div>
-<a href="{{  route('admin.index')}}" class="bg-gray-500 text-white px-4 py-2 rounded mb-4 inline-block">
-    Regresar
-</a>
-
 @endsection

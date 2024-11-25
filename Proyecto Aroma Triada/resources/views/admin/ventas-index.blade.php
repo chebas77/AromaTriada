@@ -1,19 +1,43 @@
-@extends('recursos.app')
+@extends('recursos.base_admin')
+@section('title', 'Gestión de Ventas')
 
 @section('content')
-<div class="container mx-auto px-4 py-6">
-    <h1 class="text-2xl font-bold mb-4">Gestión de Ventas</h1>
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-2xl font-bold mb-6">Gestión de Ventas</h1>
 
     {{-- Mensajes de éxito --}}
     @if(session('success'))
-        <div class="bg-green-500 text-white px-4 py-2 rounded mb-4">
+        <div class="bg-green-100 text-green-700 px-4 py-2 rounded mb-6">
             {{ session('success') }}
         </div>
     @endif
 
+    {{-- Formulario de búsqueda --}}
+    <form action="{{ route('admin.verPedidos') }}" method="GET" class="mb-6">
+        <div class="flex space-x-4">
+            <input 
+                type="text" 
+                name="search" 
+                value="{{ request('search') }}" 
+                placeholder="Buscar por nombre de usuario" 
+                class="w-full px-4 py-2 border rounded focus:ring-2 focus:ring-blue-500"
+            >
+            <button 
+                type="submit" 
+                class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 focus:outline-none">
+                Buscar
+            </button>
+            <a 
+                href="{{ route('admin.verPedidos') }}" 
+                class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 focus:outline-none">
+                Restablecer
+            </a>
+        </div>
+    </form>
+
     {{-- Tabla de ventas --}}
-    <div class="overflow-x-auto">
-        <table class="w-full border-collapse">
+    <div class="overflow-x-auto bg-white shadow-md rounded-lg">
+        <table class="w-full border-collapse border border-gray-300">
             <thead>
                 <tr class="bg-gray-200 text-left">
                     <th class="px-4 py-2 border">ID Venta</th>
@@ -21,31 +45,36 @@
                     <th class="px-4 py-2 border">Total</th>
                     <th class="px-4 py-2 border">Fecha</th>
                     <th class="px-4 py-2 border">Estado</th>
-                   {{--  <th class="px-4 py-2 border">Acciones</th>--}}
+                    <th class="px-4 py-2 border">Metodo Pago</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach($ventas as $venta)
-                    <tr class="hover:bg-gray-100">
+                    <tr class="hover:bg-gray-50">
                         <td class="px-4 py-2 border">{{ $venta->id_pedido }}</td>
                         <td class="px-4 py-2 border">{{ $venta->usuario->name ?? 'N/A' }}</td>
                         <td class="px-4 py-2 border">${{ number_format($venta->total, 2) }}</td>
                         <td class="px-4 py-2 border">{{ $venta->fecha->format('d/m/Y') }}</td>
                         <td class="px-4 py-2 border">{{ $venta->estado }}</td>
-                       {{--    <td class="px-4 py-2 border">
-                           <a href="{{ route('admin.verPedidos', ['id' => $venta->id_pedido]) }}" 
-                               class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-                                Ver Detalles
-                            </a>
-                        </td>--}}
+                        <td class="px-4 py-2 border">{{ $venta->metodo_pago }}</td>
                     </tr>
                 @endforeach
             </tbody>
         </table>
     </div>
+
+    {{-- Paginación --}}
+    <div class="mt-6">
+        {{ $ventas->appends(['search' => request('search')])->links() }}
+    </div>
 </div>
-<a href="{{  route('admin.index')}}" 
-    class="bg-gray-500 text-white px-4 py-2 rounded mb-4 inline-block hover:bg-gray-600">
-    Regresar
-</a>
+
+{{-- Botón para regresar --}}
+<div class="mt-6 text-center">
+    <a href="{{ route('admin.index') }}" 
+       class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-gray-500">
+        Regresar
+    </a>
+</div>
 @endsection
+    

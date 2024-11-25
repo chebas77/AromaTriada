@@ -16,7 +16,8 @@ class DatabaseSeeder extends Seeder
     {
         // Aquí especifica los seeders válidos que deseas ejecutar
         $this->call([
-            AdminUserSeeder::class, // Si deseas incluirlo
+            BoxesSeeder::class, // Si deseas incluirlo
+        
         ]);
     }
 }

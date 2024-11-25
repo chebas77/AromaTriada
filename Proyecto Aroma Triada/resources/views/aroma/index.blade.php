@@ -5,8 +5,8 @@
 
 <!-- Hero Section -->
 <section class="bg-gray-200 py-16 text-center">
-  <h1 class="text-3xl font-bold mb-2">Texto sobre la promesa de tu negocio</h1>
-  <p class="text-gray-700 mb-4">Descripción detallada sobre lo que tu negocio y valores ofrecen.</p>
+  <h1 class="text-3xl font-bold mb-2">Bienvenidos a Aroma Triada</h1>
+  <p class="text-gray-700 mb-4"> cambien pe.</p>
   <a href="{{ route('aroma.nosotros') }}" class="bg-black text-white px-6 py-2 font-bold hover:bg-gray-800">Conócenos</a>
 </section>
 
