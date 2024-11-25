@@ -11,7 +11,7 @@
         <li><a href="{{ route('admin.verPedidos') }}">Gestionar Ventas/Pedidos</a></li>
     </ul>
 </div>
-<a href="{{ url()->previous() }}" class="bg-gray-500 text-white px-4 py-2 rounded mb-4 inline-block">
+<a href="{{  route('aroma.index')}}" class="bg-gray-500 text-white px-4 py-2 rounded mb-4 inline-block">
     Regresar
 </a>
 

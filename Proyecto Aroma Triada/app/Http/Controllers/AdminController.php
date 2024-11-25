@@ -27,7 +27,7 @@ class AdminController extends Controller
     }
 
     // Gestiona los productos en el sistema
-        public function gestionarProductos()
+    public function gestionarProductos()
     {
         $this->verificarAdministrador(); // Verifica que el usuario sea administrador
 
@@ -35,7 +35,7 @@ class AdminController extends Controller
         return view('admin.productos-index', compact('productos')); // Retorna la vista con los productos
     }
     // Vista para editar un producto
-        public function editarProducto(Producto $producto)
+    public function editarProducto(Producto $producto)
     {
         $this->verificarAdministrador(); // Verifica que el usuario sea administrador
 
@@ -43,7 +43,7 @@ class AdminController extends Controller
     }
     // Vista para crear un producto
 
-        public function crearProducto()
+    public function crearProducto()
     {
         $this->verificarAdministrador(); // Verifica que sea administrador
 
@@ -52,7 +52,7 @@ class AdminController extends Controller
 
     //Vista para eliminar un producto
 
-        public function eliminarProducto(Producto $producto)
+    public function eliminarProducto(Producto $producto)
     {
         $this->verificarAdministrador(); // Verifica si el usuario es administrador
 
@@ -64,44 +64,44 @@ class AdminController extends Controller
 
     // Vista para guardar un producto
 
-        public function guardarProducto(Request $request)
+    public function guardarProducto(Request $request)
     {
         $this->verificarAdministrador(); // Asegúrate de verificar que sea un administrador
 
-   
-    // Validar los datos enviados desde el formulario
-    $validated = $request->validate([
-        'nombre' => 'required|max:255',         // El nombre es obligatorio y tiene un máximo de 255 caracteres
-        'descripcion' => 'nullable',            // La descripción puede ser nula
-        'precio' => 'required|numeric|min:0',   // El precio es obligatorio, numérico y mayor o igual a 0
-    ]);
 
-    // Crear un nuevo producto con los datos validados
-    Producto::create($validated);
+        // Validar los datos enviados desde el formulario
+        $validated = $request->validate([
+            'nombre' => 'required|max:255',         // El nombre es obligatorio y tiene un máximo de 255 caracteres
+            'descripcion' => 'nullable',            // La descripción puede ser nula
+            'precio' => 'required|numeric|min:0',   // El precio es obligatorio, numérico y mayor o igual a 0
+        ]);
 
-    // Redirigir al listado de productos con un mensaje de éxito
-    return redirect()->route('admin.gestionarProductos')->with('success', 'Producto creado con éxito.');
-}
+        // Crear un nuevo producto con los datos validados
+        Producto::create($validated);
+
+        // Redirigir al listado de productos con un mensaje de éxito
+        return redirect()->route('admin.gestionarProductos')->with('success', 'Producto creado con éxito.');
+    }
 
     // Vista para actualizar un producto
 
-        public function actualizarProducto(Request $request, Producto $producto)
+    public function actualizarProducto(Request $request, Producto $producto)
     {
         $this->verificarAdministrador(); // Verifica que sea administrador
 
-    // Validación de los datos enviados
-    $validated = $request->validate([
-        'nombre' => 'required|max:255',
-        'descripcion' => 'nullable',
-        'precio' => 'required|numeric|min:0',
-    ]);
+        // Validación de los datos enviados
+        $validated = $request->validate([
+            'nombre' => 'required|max:255',
+            'descripcion' => 'nullable',
+            'precio' => 'required|numeric|min:0',
+        ]);
 
-    // Actualiza el producto con los datos validados
-    $producto->update($validated);
+        // Actualiza el producto con los datos validados
+        $producto->update($validated);
 
-    // Redirige al listado de productos con un mensaje de éxito
-    return redirect()->route('admin.gestionarProductos')->with('success', 'Producto actualizado con éxito.');
-}
+        // Redirige al listado de productos con un mensaje de éxito
+        return redirect()->route('admin.gestionarProductos')->with('success', 'Producto actualizado con éxito.');
+    }
 
 
     // Gestiona los servicios en el sistema
@@ -189,27 +189,28 @@ class AdminController extends Controller
     }
 
     public function actualizarUsuario(Request $request, User $usuario)
-    {
-        $this->verificarAdministrador(); // Verifica que el usuario es administrador
-    
-        $validated = $request->validate([
-            'name' => 'required|max:255',
-            'email' => 'required|email|unique:users,email,' . $usuario->id,
-            'id_rol' => 'required|exists:roles,id_rol', // Cambiamos 'id' por 'id_rol'
-        ]);
-    
-        $usuario->update($validated); // Actualiza al usuario con los datos validados
-    
-        return redirect()->route('admin.gestionarUsuarios')->with('success', 'Usuario actualizado con éxito.');
-    }
-    
-    public function verPedidos()
+{
+    $this->verificarAdministrador(); // Verifica que el usuario sea administrador
+
+    // Valida los datos enviados
+    $validated = $request->validate([
+        'name' => 'required|max:255',
+        'email' => 'required|email|unique:users,email,' . $usuario->id,
+        'id_rol' => 'required|exists:roles,id_rol', // Validamos que el rol exista
+    ]);
+
+    // Actualiza el usuario con los datos validados
+    $usuario->update($validated);
+
+    // Redirige a la lista de usuarios con un mensaje de éxito
+    return redirect()->route('admin.gestionarUsuarios')->with('success', 'Usuario actualizado con éxito.');
+}
+
+public function verPedidos()
 {
     $this->verificarAdministrador(); // Verifica si el usuario es administrador
 
     $ventas = Venta::all(); // Obtiene todas las ventas
-    return view('admin.ventas-index', compact('ventas')); // Retorna la vista de gestión de ventas con las ventas
+    return view('admin.ventas-index', compact('ventas')); // Retorna la vista correcta
 }
-
-
 }

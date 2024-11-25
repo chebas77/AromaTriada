@@ -42,7 +42,7 @@
         {{-- Botones de acción --}}
         <div class="flex justify-between">
             <button type="submit"
-                class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                class="bg-red-600 text-white px-4 py-2 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
                 Guardar Cambios
             </button>
             <a href="{{ route('admin.gestionarProductos') }}"
@@ -52,7 +52,7 @@
         </div>
     </form>
 </div>
-<a href="{{ url()->previous() }}" class="bg-gray-500 text-white px-4 py-2 rounded mb-4 inline-block">
+<a href="{{ route('admin.index') }}" class="bg-gray-500 text-white px-4 py-2 rounded mb-4 inline-block">
     Regresar
 </a>
 

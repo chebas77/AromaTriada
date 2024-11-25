@@ -1,5 +1,5 @@
 <?php
-
+//API DE PAGO                 implementa una API de pago para manejar transacciones mediante Stripe
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
@@ -11,8 +11,9 @@ use App\Models\DetallePedido;
 use App\Models\Pago;
 use App\Models\Tracking;
 
-class PaymentController extends Controller
+class PaymentController extends Controller                        
 {
+//se encarga de integrar el flujo de pago, registrar las ventas, procesar detalles de los pedidos, registrar pagos, y seguimiento para envíos.
     public function checkout(Request $request)
     {
         // Configurar Stripe

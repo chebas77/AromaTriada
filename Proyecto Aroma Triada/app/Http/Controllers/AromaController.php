@@ -17,6 +17,8 @@ class AromaController extends Controller
         $productos = Producto::query();
         $servicios = Servicio::query();
     
+        // FILTRADO POR CATEGORIAS
+        
         if ($request->filled('categoria_id')) {
             $productos->where('id_categoria', $request->categoria_id);
             $servicios->where('id_categoria', $request->categoria_id);

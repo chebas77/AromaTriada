@@ -73,8 +73,8 @@ class CarritoController extends Controller
             ];
 
             session()->put('carrito', $carrito);
-    $this->actualizarTotalCarrito();
-    return redirect()->route('carrito.mostrar')->with('success', 'Artículo agregado al carrito.');
+            $this->actualizarTotalCarrito();
+            return redirect()->route('carrito.mostrar')->with('success', 'Artículo agregado al carrito.');
         }
 
         return redirect()->route('carrito.mostrar')->with('success', 'Artículo agregado al carrito.');
@@ -133,14 +133,14 @@ class CarritoController extends Controller
         session(['total_carrito' => $totalCarrito]);
     }
     public function confirmarCarrito()
-{
-    // Verificar si el carrito tiene productos
-    $carrito = session('carrito');
-    if (!$carrito || count($carrito) === 0) {
-        return redirect()->route('carrito.mostrar')->with('error', 'El carrito está vacío.');
-    }
+    {
+        // Verificar si el carrito tiene productos
+        $carrito = session('carrito');
+        if (!$carrito || count($carrito) === 0) {
+            return redirect()->route('carrito.mostrar')->with('error', 'El carrito está vacío.');
+        }
 
-    // Redirigir a la vista de carrito confirmado
-    return view('aroma.carrito_confirmado', ['carrito' => $carrito]);
-}
+        // Redirigir a la vista de carrito confirmado
+        return view('aroma.carrito_confirmado', ['carrito' => $carrito]);
+    }
 }

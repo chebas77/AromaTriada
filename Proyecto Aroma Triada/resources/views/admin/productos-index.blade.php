@@ -35,7 +35,7 @@
         </table>
     </div>
 </div>
-<a href="{{ url()->previous() }}" class="bg-gray-500 text-white px-4 py-2 rounded mb-4 inline-block">
+<a href="{{  route('admin.index') }}" class="bg-gray-500 text-white px-4 py-2 rounded mb-4 inline-block">
     Regresar
 </a>
 

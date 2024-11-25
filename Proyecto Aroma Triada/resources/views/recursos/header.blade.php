@@ -25,7 +25,6 @@
 
       <!-- Iconos alineados a la derecha -->
       <div class="flex space-x-6 items-center flex-shrink-0">
-        <a href="#" class="hover:underline">🔍</a>
         <a href="{{ route('carrito.mostrar') }}" class="hover:underline">🛒</a>
         <a href="{{ route('aroma.perfil') }}" class="hover:underline">👤</a>
       </div>
