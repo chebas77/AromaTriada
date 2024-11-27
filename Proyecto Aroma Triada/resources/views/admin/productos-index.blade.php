@@ -74,4 +74,6 @@
         </table>
     </div>
 </div>
+<a href="{{ route('admin.crearProducto') }}" class="bg-blue-500 text-white px-4 py-2 rounded mb-4 inline-block">Crear Producto</a>
+
 @endsection

@@ -12,36 +12,28 @@ use Illuminate\Http\Request;
 class AromaController extends Controller
 {
     public function catalogo(Request $request)
-    {
-        $categorias = Categoria::all();
-        $productos = Producto::query();
-        $servicios = Servicio::query();
+{
     
-        // FILTRADO POR CATEGORIAS
-        
-        if ($request->filled('categoria_id')) {
-            $productos->where('id_categoria', $request->categoria_id);
-            $servicios->where('id_categoria', $request->categoria_id);
-        }
-    
-        // Ejecutar las consultas para obtener los datos
-        $productos = $productos->get();
-        $servicios = $servicios->get();
-        
-        // Obtener solo los IDs de los productos y servicios
-        $productoIds = $productos->pluck('id'); // Esto obtiene una colección solo de IDs de productos
-        $servicioIds = $servicios->pluck('id'); // Esto obtiene una colección solo de IDs de servicios
-    
-        // Guardar los IDs en la sesión (opcional)
-        session()->put('producto_ids', $productoIds);
-        session()->put('servicio_ids', $servicioIds);
-    
-        // Calcular el total de resultados
-        $totalResultados = $productos->count() ;
-    
-        // Pasar los datos a la vista
-        return view('aroma.catalogo', compact('categorias', 'productos', 'servicios', 'totalResultados'));
+    $categorias = Categoria::all(); // Obtener todas las categorías
+    $productosQuery = Producto::query(); // Iniciar query de productos
+    $serviciosQuery = Servicio::query(); // Iniciar query de servicios
+
+    // Filtrado por categorías
+    if ($request->filled('categorias')) {
+        $productosQuery->whereIn('id_categoria', $request->categorias);
+        $serviciosQuery->whereIn('id_categoria', $request->categorias);
     }
+
+    // Obtener los productos y servicios filtrados
+    $productos = $productosQuery->get();
+    $servicios = $serviciosQuery->get();
+
+    // Calcular el total de resultados
+    $totalResultados = $productos->count() + $servicios->count();
+
+    // Pasar datos a la vista
+    return view('aroma.catalogo', compact('categorias', 'productos', 'servicios', 'totalResultados'));
+}
     
 
     public function index()
@@ -60,6 +52,8 @@ class AromaController extends Controller
         // Pasar los datos a la vista
         return view('aroma.index', compact('productosDestacados', 'categorias'));
     }
+
+
     public function carrito()
     {
         // Aquí puedes agregar la lógica para mostrar el carrito

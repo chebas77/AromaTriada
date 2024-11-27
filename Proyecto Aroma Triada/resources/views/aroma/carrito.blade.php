@@ -15,9 +15,17 @@
         </div>
         <div class="flex-grow">
             <h3 class="text-lg font-bold">{{ $item['nombre'] ?? 'Producto sin nombre' }}</h3>
-            <p>Precio unitario: ${{ number_format($item['precio'] ?? 0, 2) }}</p>
 
-            <!-- Selector de cantidad para productos -->
+            <!-- Mostrar tamaño solo para productos -->
+            @if ($item['tipo'] === 'producto')
+            <p class="text-gray-600">Tamaño: {{ $item['tamano'] ?? 'No especificado' }}</p>
+            <p class="text-gray-600">Dedicatoria: {{ $item['dedicatoria'] ?? 'Sin dedicatoria' }}</p>
+            @endif
+
+            <p>Precio unitario: S/ {{ number_format($item['precio_unitario'] ?? 0, 2) }}</p>
+
+            <!-- Mostrar cantidad solo para productos -->
+            @if ($item['tipo'] === 'producto')
             <form action="{{ route('carrito.actualizar') }}" method="POST" class="mt-2">
                 @csrf
                 @method('PATCH')
@@ -25,13 +33,14 @@
 
                 <label for="cantidad" class="text-gray-600">Cantidad:</label>
                 <select name="cantidad" class="border rounded px-2 py-1" onchange="this.form.submit()">
-                    @for ($i = 1; $i <= 5; $i++)
+                    @for ($i = 1; $i <= 10; $i++)
                         <option value="{{ $i }}" {{ $item['cantidad'] == $i ? 'selected' : '' }}>{{ $i }}</option>
                     @endfor
                 </select>
             </form>
+            @endif
 
-            <p class="text-red-500 font-semibold mt-2">Total: ${{ number_format(($item['precio'] ?? 0) * $item['cantidad'], 2) }}</p>
+            <p class="text-red-500 font-semibold mt-2">Total: S/ {{ number_format(($item['precio_unitario'] ?? 0) * $item['cantidad'], 2) }}</p>
         </div>
 
         <!-- Botón para eliminar el producto del carrito -->
@@ -52,24 +61,24 @@
         <h2 class="text-2xl font-bold mt-12">Servicios Disponibles</h2>
         <form id="servicios-form" action="{{ route('carrito.agregarServicios') }}" method="POST">
             @csrf
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
+            <div class="flex justify-around items-center space-x-4 mt-4">
                 @foreach ($servicios as $servicio)
-                <div class="bg-white shadow p-4 rounded text-center">
+                <label class="bg-white shadow p-4 rounded text-center flex flex-col items-center">
+                    <input type="radio" name="servicio" value="{{ $servicio->id_servicio }}" class="mb-2">
                     <h3 class="text-lg font-semibold">{{ $servicio->nombre }}</h3>
-                    <p class="text-gray-600">${{ number_format($servicio->precio, 2) }}</p>
-                    <div class="flex justify-center items-center space-x-2 mt-2">
-                        <button type="button" onclick="updateQuantity({{ $servicio->id_servicio }}, -1)" class="px-2 py-1 bg-gray-300 rounded">-</button>
-                        <span id="display-{{ $servicio->id_servicio }}" class="text-lg">0</span>
-                        <button type="button" onclick="updateQuantity({{ $servicio->id_servicio }}, 1)" class="px-2 py-1 bg-gray-300 rounded">+</button>
-                    </div>
-                    <input type="hidden" id="quantity-{{ $servicio->id_servicio }}" name="servicios[{{ $servicio->id_servicio }}]" value="0">
-                </div>
+                    <p class="text-gray-600">S/ {{ number_format($servicio->precio, 2) }}</p>
+                </label>
                 @endforeach
+            </div>
+
+            <!-- Campo adicional si se selecciona "Mozo" -->
+            <div id="mozo-options" class="mt-4 hidden">
+                <label for="cantidad_mozos" class="block text-gray-600">Cantidad de Mozos:</label>
+                <input type="number" name="cantidad_mozos" id="cantidad_mozos" min="1" value="1" class="border rounded px-4 py-2">
             </div>
 
             <!-- Botones para agregar servicios y confirmar carrito -->
             <div class="flex justify-between items-center mt-6">
-                <!-- Botón para agregar servicios -->
                 <button type="submit" class="bg-blue-500 text-white px-6 py-2 rounded-lg">
                     Agregar Servicios al Carrito
                 </button>
@@ -88,14 +97,19 @@
     </section>
 
     <script>
-        function updateQuantity(id, delta) {
-            const quantityInput = document.getElementById(`quantity-${id}`);
-            const display = document.getElementById(`display-${id}`);
-            let quantity = parseInt(quantityInput.value) + delta;
-            quantity = quantity < 0 ? 0 : quantity; // Asegura que la cantidad no sea negativa
-            quantityInput.value = quantity;
-            display.textContent = quantity;
-        }
+        // Mostrar campo de cantidad si se selecciona "Mozo"
+        const servicioRadios = document.querySelectorAll('input[name="servicio"]');
+        const mozoOptions = document.getElementById('mozo-options');
+
+        servicioRadios.forEach(radio => {
+            radio.addEventListener('change', () => {
+                if (radio.parentElement.querySelector('h3').textContent.trim().toLowerCase() === 'mozo') {
+                    mozoOptions.classList.remove('hidden');
+                } else {
+                    mozoOptions.classList.add('hidden');
+                }
+            });
+        });
     </script>
 </section>
 @endsection

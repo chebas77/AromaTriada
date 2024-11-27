@@ -12,7 +12,15 @@ class DetallePedido extends Model
     protected $table = 'detalle_pedidos'; // Tabla detalle_pedidos
     protected $primaryKey = 'id_detalle'; // Llave primaria
 
-    protected $fillable = ['id_pedido', 'id_producto', 'id_servicio', 'cantidad', 'precio_unitario', 'personalizacion'];
+    protected $fillable = [
+        'id_pedido',
+        'id_producto',
+        'id_servicio',
+        'cantidad',
+        'precio_unitario',
+        'dedicatoria', // Campo renombrado
+        'tamano',      // Nuevo campo
+    ];
 
     public function venta()
     {

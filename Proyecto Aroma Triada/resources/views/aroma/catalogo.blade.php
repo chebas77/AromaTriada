@@ -1,5 +1,5 @@
 @extends('recursos.app')
-@section('title', 'Catalogo de Productos')
+@section('title', 'Catálogo de Productos')
 
 @section('content')
 <!-- Store Banner -->
@@ -8,7 +8,7 @@
     <h1 class="text-3xl font-bold mb-2">Tienda</h1>
     <p class="text-gray-700">
       Bienvenido a nuestra tienda, donde encontrarás una selección exclusiva de productos y servicios para tus eventos especiales.
-      Desde deliciosos postres y tortas hasta servicios personalizados como decoración y catering, estamos aquí para ayudarte a crear momentos inolvidables. Explora nuestro catálogo y descubre cómo podemos hacer de tu celebración algo único y memorable.
+      Desde deliciosos postres y tortas hasta servicios personalizados como decoración y catering. Explora nuestro catálogo y descubre cómo podemos hacer de tu celebración algo único.
     </p>
   </div>
 </section>
@@ -18,23 +18,27 @@
   <!-- Sidebar -->
   <aside class="md:w-1/4">
     <h3 class="text-xl font-bold mb-4">Categorías</h3>
-    <form action="{{ route('aroma.catalogo') }}" method="GET">
+    <form action="{{ route('aroma.catalogo') }}" method="GET" class="bg-white p-4 rounded-lg shadow">
       <ul class="space-y-2">
         @foreach ($categorias as $categoria)
         <li>
           <label class="flex items-center">
             <input
               type="checkbox"
-              name="categoria_id"
+              name="categorias[]"
               value="{{ $categoria->id_categoria }}"
               class="mr-2"
-              {{ request('categoria_id') == $categoria->id_categoria ? 'checked' : '' }}>
+              {{ in_array($categoria->id_categoria, request('categorias', [])) ? 'checked' : '' }}>
             {{ $categoria->nombre }}
           </label>
         </li>
         @endforeach
       </ul>
-      <button type="submit" class="mt-4 bg-black text-white px-4 py-2 rounded">Filtrar</button>
+      <button
+        type="submit"
+        class="mt-4 w-full bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded font-bold focus:outline-none">
+        Filtrar
+      </button>
     </form>
   </aside>
 
@@ -55,21 +59,18 @@
         @foreach($productos as $producto)
         <div class="bg-white shadow p-4 rounded">
           <div class="bg-gray-300 h-40 mb-4">
-            <img src="{{ asset($producto->imagen) }}" alt="{{ $producto->nombre }}" class="h-full w-full object-cover">
+            <img src="{{ $producto->imagen ? asset('storage/' . $producto->imagen) : asset('images/placeholder.png') }}"
+              alt="{{ $producto->nombre }}" class="h-full w-full object-cover rounded">
           </div>
           <h4 class="text-sm font-bold text-gray-500">{{ $producto->categoria->nombre ?? 'Sin categoría' }}</h4>
-          <p class="text-gray-800 mb-2">{{ $producto->nombre }}</p>
-          <p class="text-gray-700 font-bold mb-4">${{ number_format($producto->precio, 2) }}</p>
+          <p class="text-gray-800 mb-2 font-bold">{{ $producto->nombre }}</p>
+          <p class="text-gray-700 font-bold mb-4">S/ {{ number_format($producto->precio, 2) }}</p>
 
-          <!-- Formulario para agregar producto al carrito -->
-          <form action="{{ route('carrito.agregar') }}" method="POST">
-            @csrf
-            <input type="hidden" name="tipo" value="producto">
-            <a href="{{ route('detalle.mostrar', ['tipo' => 'producto', 'id' => $producto->id_producto]) }}" class="text-blue-500 hover:underline">Ver más información</a>
-            <input type="hidden" name="id" value="{{ $producto->id_producto }}"> <!-- ID del producto -->
-            <button type="submit" class="bg-yellow-600 text-white px-6 py-2 font-bold hover:bg-gray-800 w-full">Agregar al Carrito</button>
-           
-          </form>
+          <!-- Botón que redirige al detalle del producto -->
+          <a href="{{ route('detalle.item', ['tipo' => 'producto', 'id' => $producto->id_producto]) }}"
+            class="bg-blue-500 text-white px-6 py-2 font-bold hover:bg-blue-600 w-full rounded inline-block text-center">
+            Ir a comprar
+          </a>
         </div>
         @endforeach
       </div>

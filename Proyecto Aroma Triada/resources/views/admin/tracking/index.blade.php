@@ -49,13 +49,23 @@
             </thead>
             <tbody>
                 @foreach ($trackings as $tracking)
-                    <tr class="hover:bg-gray-50">
+                    @php
+                        // Asignar clases dinámicas según el estado
+                        $rowClass = match($tracking->estado_actual) {
+                            'En proceso' => 'bg-yellow-100',
+                            'Enviado' => 'bg-blue-100',
+                            'Entregado' => 'bg-green-100',
+                            'Cancelado' => 'bg-red-100',
+                            default => '',
+                        };
+                    @endphp
+                    <tr class="hover:bg-gray-50 {{ $rowClass }}">
                         <td class="px-4 py-2 border">{{ $tracking->id_tracking }}</td>
                         <td class="px-4 py-2 border">{{ $tracking->id_venta }}</td>
                         <td class="px-4 py-2 border">{{ $tracking->estado_actual }}</td>
                         <td class="px-4 py-2 border">{{ $tracking->origen }}</td>
                         <td class="px-4 py-2 border">{{ $tracking->destino }}</td>
-                        <td class="px-4 py-2 border">{{ $tracking->fecha_despacho ?? 'No definida' }}</td>
+                        <td class="px-4 py-2 border">{{ $tracking->updated_at ?? 'No definida' }}</td>
                         <td class="px-4 py-2 border">
                             <a href="{{ route('admin.tracking.show', $tracking->id_tracking) }}" 
                                 class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">

@@ -50,7 +50,17 @@
             </thead>
             <tbody>
                 @foreach($ventas as $venta)
-                    <tr class="hover:bg-gray-50">
+                    @php
+                        // Asignar clases dinámicamente según el estado
+                        $rowClass = match($venta->estado) {
+                            'En proceso' => 'bg-yellow-100',
+                            'Enviado' => 'bg-blue-100',
+                            'Entregado' => 'bg-green-100',
+                            'Cancelado' => 'bg-red-100',
+                            default => '',
+                        };
+                    @endphp
+                    <tr class="hover:bg-gray-50 {{ $rowClass }}">
                         <td class="px-4 py-2 border">{{ $venta->id_pedido }}</td>
                         <td class="px-4 py-2 border">{{ $venta->usuario->name ?? 'N/A' }}</td>
                         <td class="px-4 py-2 border">${{ number_format($venta->total, 2) }}</td>
@@ -77,4 +87,3 @@
     </a>
 </div>
 @endsection
-    

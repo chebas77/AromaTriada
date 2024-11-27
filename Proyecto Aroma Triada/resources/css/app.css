@@ -5,3 +5,28 @@
 [x-cloak] {
     display: none;
 }
+
+header {
+  background-color: #D3BBA6;
+  color: black;
+}
+
+header nav a:hover {
+  text-decoration: underline;
+}
+
+input[type="text"] {
+  border: 1px solid #ccc;
+}
+
+.bg-black {
+  background-color: #000000;
+}
+
+.text-black {
+  color: #000000;
+}
+
+.text-xs {
+  font-size: 12px;
+}

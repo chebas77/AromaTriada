@@ -18,19 +18,30 @@ Route::get('/', [AromaController::class, 'index'])->name('aroma.index');
 // Rutas del catálogo
 Route::prefix('catalogo')->group(function () {
     Route::get('/', [AromaController::class, 'catalogo'])->name('aroma.catalogo');
-    Route::get('/detalle/{tipo}/{id}', [AromaController::class, 'mostrarDetalle'])->name('detalle.mostrar');
+   
 });
+
+
+Route::get('/carrito/confirmar', [CarritoController::class, 'confirmarCarrito'])->name('carrito.confirmar');
+Route::post('/carrito/procesar', [CarritoController::class, 'procesarCarrito'])->name('carrito.procesar');
+
 
 // Rutas del carrito
 Route::prefix('carrito')->group(function () {
     Route::get('/', [CarritoController::class, 'mostrarCarrito'])->name('carrito.mostrar');
     Route::post('/agregar', [CarritoController::class, 'agregar'])->name('carrito.agregar');
+    Route::get('/detalle/{tipo}/{id}', [CarritoController::class, 'mostrarDetalle'])->name('detalle.item');
+
     Route::post('/agregar-servicios', [CarritoController::class, 'agregarServicios'])->name('carrito.agregarServicios');
     Route::post('/confirmar', [CarritoController::class, 'confirmarCarrito'])->name('carrito.confirmar');
     Route::patch('/actualizar', [CarritoController::class, 'actualizarCantidad'])->name('carrito.actualizar');
     Route::delete('/eliminar', [CarritoController::class, 'eliminar'])->name('carrito.eliminar');
     Route::post('/personalizar-entrega', [CarritoController::class, 'personalizarEntrega'])->name('carrito.personalizarEntrega');
-    Route::get('/confirmado', [CarritoController::class, 'mostrarCarritoConfirmado'])->name('carrito.confirmado');
+   
+    Route::match(['get', 'post'], '/carrito/confirmar', [CarritoController::class, 'confirmarCarrito'])->name('carrito.confirmar');
+Route::post('/carrito/metodo-entrega', [CarritoController::class, 'guardarMetodoEntrega'])->name('carrito.metodo_entrega');
+Route::post('/carrito/procesar', [CarritoController::class, 'procesarCarrito'])->name('carrito.procesar');
+
 });
 
 // Rutas de servicios
@@ -38,10 +49,11 @@ Route::get('/servicios', [CarritoController::class, 'mostrarServicios'])->name('
 
 // Rutas de pago
 Route::middleware(['auth'])->prefix('payment')->group(function () {
-    Route::get('/checkout', [PaymentController::class, 'checkout'])->name('checkout');
-    Route::get('/success', [PaymentController::class, 'success'])->name('payment.success');
-    Route::get('/cancel', [PaymentController::class, 'cancel'])->name('payment.cancel');
+    Route::post('/checkout', [PaymentController::class, 'checkout'])->name('checkout'); // Procesar el pago
+    Route::get('/success', [PaymentController::class, 'success'])->name('payment.success'); // Éxito
+    Route::get('/cancel', [PaymentController::class, 'cancel'])->name('payment.cancel'); // Cancelación
 });
+
 
 // Rutas para el tracking
 Route::middleware(['auth'])->prefix('tracking')->group(function () {
