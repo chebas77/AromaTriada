@@ -19,7 +19,7 @@ export default {
             },
 
             colors: {
-                beige: '#d8b660', // Define el color beige personalizado
+                beige: '#c5ae93', // Define el color beige personalizado
             },
 
         },

@@ -1,6 +1,6 @@
 <!-- recursos/header_auth.blade.php -->
 <header class="bg-white shadow-md">
-    <div class="container mx-auto flex justify-center py-4">
-        <a href="/" class="text-xl font-bold text-black hover:text-gray-700">LOGO</a>
+    <div class="container mx-auto flex justify-center py-2">
+        <a href="/" class="transform translate-x-[-10px]"><img src="{{ asset('images/logo.jpg') }}" alt="Logo" class="h-32 ml-4"></a>
     </div>
 </header>

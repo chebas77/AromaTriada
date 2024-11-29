@@ -4,11 +4,18 @@
   @section('content')
 
   <!-- Hero Section -->
-  <section class="bg-gray-200 py-16 text-center">
-    <h1 class="text-3xl font-bold mb-2">Bienvenidos a Aroma Triada</h1>
-    <p class="text-gray-700 mb-4"> cambien pe.</p>
-    <a href="{{ route('aroma.nosotros') }}" class="bg-black text-white px-6 py-2 font-bold hover:bg-gray-800">Conócenos</a>
-  </section>
+  <section class="bg-cover bg-center py-48 text-center" style="background-image: url({{ asset('images/fondo.jpg') }}); background-size: cover; background-position: center;">
+  <div class="flex justify-end px-6 py-16 w-full">
+    <!-- Contenedor preventa con fondo blanco y texto rojo -->
+    <div class="bg-white text-red-600 px-12 py-8 sm:max-h-screen w-[400px] max-h-fit">
+      <h2 class="text-3xl font-bold mb-4 text-right">¡Aprovecha nuestra preventa!</h2>
+      <p class="text-lg mb-6 text-right">No te pierdas las ofertas exclusivas disponibles solo por tiempo limitado.</p>
+      <a href="#" class="bg-red-600 text-white px-6 py-2 font-bold hover:bg-red-700 rounded">¡Compra Ahora!</a>
+    </div>
+  </div>
+</section>
+
+ 
 
   <!-- Featured Collection Carousel -->
   <section class="container mx-auto py-12 px-6 text-center">

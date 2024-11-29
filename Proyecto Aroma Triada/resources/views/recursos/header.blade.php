@@ -1,52 +1,54 @@
-@vite('resources/css/app.css')
 <div class="bg-gray-100 flex flex-col">
-  <!-- Header -->
-  <header class="bg-black text-white w-full">
-    <div class="text-center py-1 text-xs">
-      Envío Gratis a partir de $500.00
-    </div>
-    <nav class="w-full flex items-center justify-between py-4 px-6">
-      <!-- Logo alineado a la izquierda -->
-      <div class="text-xl font-bold flex-shrink-0">
-        <a href="{{ route('aroma.index') }}">
-          <img src="{{ asset('images/Logo_AromaTriada.jpeg') }}" alt="Logo Aroma Triada" class="h-8">
-        </a>
-      </div>
+    <!-- Header -->
+    <header class="bg-white text-black w-full">
+        <!-- Banner de promociones -->
+        <div class="bg-black text-white text-center py-2 text-xs">
+            APROVECHA LOS NUEVOS LANZAMIENTOS POR ÉPOCAS NAVIDEÑAS!!
+        </div>
+        
+        <!-- Barra de navegación -->
+        <nav class="w-full flex items-center justify-between py-2 px-12">
+            <!-- Logo centrado -->
+            <div class="flex-1 flex justify-center">
+                <a href="{{ route('aroma.index') }}">
+                    <img src="{{ asset('images/logo.jpg') }}" alt="Logo Aroma Triada" class="h-20 ml-8">
+                </a>
+            </div>
 
-      <!-- Contenedor central para el menú de navegación -->
-      <div class="flex justify-center flex-grow">
-        <ul class="flex space-x-8">
-          <li><a href="{{ route('aroma.index') }}" class="hover:underline">INICIO</a></li>
-          <li><a href="{{ route('aroma.nosotros') }}" class="hover:underline">NOSOTROS</a></li>
-          <li><a href="{{ route('aroma.preguntas') }}" class="hover:underline">PREGUNTAS</a></li>
-          <li><a href="{{ route('aroma.catalogo') }}" class="hover:underline">CATÁLOGO</a></li>
-        </ul>
-      </div>
+            <!-- Enlaces de usuario -->
+            <div class="flex items-center space-x-6">
+                <!-- Icono del carrito y perfil -->
+                <a href="{{ route('carrito.mostrar') }}" class="hover:underline"><i class="fa-solid fa-cart-shopping text-2xl"></i></a>
+                <a href="{{ route('aroma.perfil') }}" class="hover:underline"><i class="fa-solid fa-user text-2xl"></i></a>
+            </div>
+        </nav>
 
-      <!-- Iconos alineados a la derecha -->
-      <div class="flex space-x-6 items-center flex-shrink-0">
-        <a href="{{ route('carrito.mostrar') }}" class="hover:underline">🛒</a>
-        <a href="{{ route('aroma.perfil') }}" class="hover:underline">👤</a>
-      </div>
-    </nav>
+        <!-- Menú de navegación debajo del logo -->
+        <div class="bg-beige py-2">
+            <div class="flex justify-center">
+                <ul class="flex space-x-8">
+                    <li><a href="{{ route('aroma.index') }}" class="hover:underline">INICIO</a></li>
+                    <li><a href="{{ route('aroma.nosotros') }}" class="hover:underline">NOSOTROS</a></li>
+                    <li><a href="{{ route('aroma.preguntas') }}" class="hover:underline">PREGUNTAS</a></li>
+                    <li><a href="{{ route('aroma.catalogo') }}" class="hover:underline">CATÁLOGO</a></li>
+                </ul>
+            </div>
+        </div>
 
-    <!-- Sección de Iniciar Sesión / Registrarse alineada a la derecha -->
-    <div class="w-full py-4 px-6 text-sm text-gray-500 text-right">
-      @if(auth()->check())
-        {{-- Si el usuario está autenticado y es administrador, muestra el enlace al panel de administración --}}
-        @if(auth()->user()->esAdministrador())
-          <a href="{{ route('admin.index') }}" class="hover:underline text-white">Panel de Administración</a> |
-        @endif
-        {{-- Muestra un enlace para cerrar sesión --}}
-        <form action="{{ route('logout') }}" method="POST" style="display: inline;">
-          @csrf
-          <button type="submit" class="hover:underline text-white">Cerrar Sesión</button>
-        </form>
-      @else
-        {{-- Enlace de inicio de sesión y registro para usuarios no autenticados --}}
-        <a href="{{ route('aroma.inicioSesion') }}" class="hover:underline">Iniciar Sesión</a> /
-        <a href="{{ route('aroma.registro') }}" class="hover:underline">Registrarse</a>
-      @endif
-    </div>
-  </header>
+        <!-- Sección de inicio de sesión / registrarse -->
+        <div class="bg-beige w-full py-2 px-12 text-sm text-black text-right">
+            @if(auth()->check())
+                @if(auth()->user()->esAdministrador())
+                    <a href="{{ route('admin.index') }}" class="hover:underline text-black">Panel de Administración</a> |
+                @endif
+                <form action="{{ route('logout') }}" method="POST" style="display: inline;">
+                    @csrf
+                    <button type="submit" class="hover:underline text-black">Cerrar Sesión</button>
+                </form>
+            @else
+                <a href="{{ route('aroma.inicioSesion') }}" class="hover:underline text-black">Iniciar Sesión |</a>
+                <a href="{{ route('aroma.registro') }}" class="hover:underline text-black">Registrarse</a>
+            @endif
+        </div>
+    </header>
 </div>
