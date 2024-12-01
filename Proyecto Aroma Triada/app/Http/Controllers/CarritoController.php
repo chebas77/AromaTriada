@@ -136,6 +136,7 @@ class CarritoController extends Controller
     // Confirma el carrito y calcula el total
     public function confirmarCarrito()
     {
+        
         $carrito = session('carrito', []);
 
         if (!$carrito || count($carrito) === 0) {
@@ -178,6 +179,30 @@ class CarritoController extends Controller
     }
 
     // Guarda el método de entrega
+
+    // Agrega un producto al carrito (simplificado)
+    public function agregarAlCarrito(Request $request)
+    {
+
+        $carrito = session('carrito', []);
+
+        
+        $carrito[] = [
+
+            'id' => $request->id,
+            'tipo' => $request->tipo,
+            'nombre' => Producto::findOrFail($request->id)->nombre,
+            'tamano' => $request->tamano,
+            'cantidad' => $request->cantidad,
+            'precio_unitario' => $request->precio_unitario,
+            'total' => $request->cantidad * $request->precio_unitario,
+            
+        ];
+        
+        session(['carrito' => $carrito]);
+        
+        return redirect()->route('carrito.mostrar')->with('success', 'Producto agregado al carrito.');
+    }
     public function guardarMetodoEntrega(Request $request)
     {
         $validated = $request->validate([
@@ -191,24 +216,5 @@ class CarritoController extends Controller
         }
 
         return redirect()->route('carrito.confirmar')->with('success', 'Método de entrega actualizado.');
-    }
-
-    // Agrega un producto al carrito (simplificado)
-    public function agregarAlCarrito(Request $request)
-    {
-        $carrito = session('carrito', []);
-
-        $carrito[] = [
-            'id' => $request->id,
-            'tipo' => $request->tipo,
-            'nombre' => Producto::findOrFail($request->id)->nombre,
-            'cantidad' => $request->cantidad,
-            'precio_unitario' => $request->precio_unitario,
-            'total' => $request->cantidad * $request->precio_unitario,
-        ];
-
-        session(['carrito' => $carrito]);
-
-        return redirect()->route('carrito.mostrar')->with('success', 'Producto agregado al carrito.');
     }
 }

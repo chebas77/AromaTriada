@@ -1,10 +1,10 @@
-  @extends('recursos.app')
+@extends('recursos.app')
   @section('title', 'Index')
 
   @section('content')
 
   <!-- Hero Section -->
-  <section class="bg-cover bg-center py-48 text-center" style="background-image: url({{ asset('images/fondo.jpg') }}); background-size: cover; background-position: center;">
+  <section class="bg-cover bg-center py-32 text-center" style="background-image: url({{ asset('images/navidadfondo.jpg') }}); background-size: cover; background-position: center;">
   <div class="flex justify-end px-6 py-16 w-full">
     <!-- Contenedor preventa con fondo blanco y texto rojo -->
     <div class="bg-white text-red-600 px-12 py-8 sm:max-h-screen w-[400px] max-h-fit">
@@ -158,7 +158,7 @@
       <p class="text-gray-700 mb-6 max-w-lg mx-auto">
         Con cada producto que preparamos, ponemos un toque de cariño y dedicación. Sorprende a tus seres queridos con una experiencia única y auténtica.
       </p>
-      <button onclick="window.location.href=`{{ route('aroma.catalogo') }}`"
+      <button onclick="window.location.href={{ route('aroma.catalogo') }}"
         class="bg-black text-white px-6 py-3 font-bold text-lg rounded hover:bg-gray-800 transition duration-300">
         Descubre Nuestros Productos
       </button>

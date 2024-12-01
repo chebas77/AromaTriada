@@ -47,7 +47,7 @@
                     <tr>
                         <td class="border px-4 py-2">
                             @if($producto->imagen)
-                                <img src="{{ asset('storage/' . $producto->imagen) }}" alt="{{ $producto->nombre }}" class="h-12 w-12 object-cover">
+                                <img src="{{ asset( $producto->imagen) }}" alt="{{ $producto->nombre }}" class="h-12 w-12 object-cover">
                             @else
                                 <span>Sin imagen</span>
                             @endif
@@ -61,6 +61,8 @@
                             <form action="{{ route('admin.eliminarProducto', $producto) }}" method="POST" class="inline">
                                 @csrf
                                 @method('DELETE')
+                                <br>
+                                <br>
                                 <button type="submit" class="bg-red-500 text-white px-2 py-1 rounded">Eliminar</button>
                             </form>
                         </td>

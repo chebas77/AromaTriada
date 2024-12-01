@@ -49,6 +49,20 @@
             @enderror
         </div>
 
+        <!-- Categoría -->
+        <div>
+            <label for="categoria" class="block text-gray-700 font-bold">Categoría</label>
+            <select id="categoria" name="id_categoria" required class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500">
+                <option value="">Seleccione una categoría</option>
+                @foreach($categorias as $categoria)
+                    <option value="{{ $categoria->id_categoria }}">{{ $categoria->nombre }}</option>
+                @endforeach
+            </select>
+            @error('id_categoria')
+                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+            @enderror
+        </div>
+
         <!-- Botones -->
         <div class="flex space-x-4">
             <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">

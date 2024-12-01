@@ -19,7 +19,7 @@ class DetallePedido extends Model
         'cantidad',
         'precio_unitario',
         'dedicatoria', // Campo renombrado
-        'tamano',      // Nuevo campo
+        'tamaño',      // Nuevo campo
     ];
 
     public function venta()

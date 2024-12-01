@@ -46,6 +46,8 @@
                     <th class="px-4 py-2 border">Fecha</th>
                     <th class="px-4 py-2 border">Estado</th>
                     <th class="px-4 py-2 border">Metodo Pago</th>
+                    <th class="px-4 py-2 border">Metodo Entrega</th>
+                    <th class="px-4 py-2 border">Direccion Entrega</th>
                 </tr>
             </thead>
             <tbody>
@@ -60,14 +62,16 @@
                             default => '',
                         };
                     @endphp
-                    <tr class="hover:bg-gray-50 {{ $rowClass }}">
-                        <td class="px-4 py-2 border">{{ $venta->id_pedido }}</td>
-                        <td class="px-4 py-2 border">{{ $venta->usuario->name ?? 'N/A' }}</td>
-                        <td class="px-4 py-2 border">${{ number_format($venta->total, 2) }}</td>
-                        <td class="px-4 py-2 border">{{ $venta->fecha->format('d/m/Y') }}</td>
-                        <td class="px-4 py-2 border">{{ $venta->estado }}</td>
-                        <td class="px-4 py-2 border">{{ $venta->metodo_pago }}</td>
-                    </tr>
+                    <tr class="hover:bg-gray-50 cursor-pointer" onclick="window.location='{{ route('admin.ventas.detalle', $venta->id_pedido) }}'">
+    <td class="px-4 py-2 border">{{ $venta->id_pedido }}</td>
+    <td class="px-4 py-2 border">{{ $venta->usuario->name ?? 'N/A' }}</td>
+    <td class="px-4 py-2 border">{{ number_format($venta->total, 2) }}</td>
+    <td class="px-4 py-2 border">{{ $venta->fecha->format('d/m/Y') }}</td>
+    <td class="px-4 py-2 border">{{ $venta->estado }}</td>
+    <td class="px-4 py-2 border">{{ $venta->metodo_pago }}</td>
+    <td class="px-4 py-2 border">{{ $venta->metodo_entrega }}</td>
+    <td class="px-4 py-2 border">{{ $venta->direccion_entrega }}</td>
+</tr>
                 @endforeach
             </tbody>
         </table>

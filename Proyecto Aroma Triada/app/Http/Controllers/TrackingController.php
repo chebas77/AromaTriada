@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Models\Pedido;
 use App\Models\Venta;
+use App\Models\DetallePedido;
 use App\Models\Tracking;
 use Illuminate\Http\Request;
 use Illuminate\Database\Query\Expression;
@@ -26,23 +27,28 @@ class TrackingController extends Controller
         'fecha_despacho',
         'fecha_entrega',
     ];
+
+    // Mostrar todos los tracking del usuario autenticado
     public function mostrar()
-    {
-        // Verificar si el usuario está autenticado
-        if (!Auth::check()) {
-            return redirect()->route('login')->with('error', 'Debes iniciar sesión para ver el tracking.');
-        }
-
-        // Obtener el tracking asociado al usuario autenticado
-        $user = Auth::user();
-        $tracking = Tracking::whereHas('venta', function ($query) use ($user) {
-            $query->where('id_usuario', $user->id);
-        })->get();
-
-        // Mostrar la vista con los datos del tracking
-        return view('aroma.tracking', compact('tracking'));
+{
+    // Verificar si el usuario está autenticado
+    if (!Auth::check()) {
+        return redirect()->route('login')->with('error', 'Debes iniciar sesión para ver el tracking.');
     }
-    public function index(Request $request)
+
+    // Obtener el tracking asociado al usuario autenticado, ordenado de último a primero
+    $user = Auth::user();
+    $tracking = Tracking::whereHas('venta', function ($query) use ($user) {
+        $query->where('id_usuario', $user->id);
+    })->orderBy('id_tracking', 'desc') // Orden descendente por id_tracking
+      ->get();
+
+    // Mostrar la vista con los datos del tracking
+    return view('aroma.tracking', compact('tracking'));
+}
+
+    // Función para indexar y filtrar los trackings para admin
+    public function indexAdmin(Request $request)
 {
     $search = $request->get('search');
     $query = Tracking::query();
@@ -62,20 +68,26 @@ class TrackingController extends Controller
     public function gestionarTracking($id)
     {
         $tracking = Tracking::findOrFail($id);
-
+    
         // Obtener los valores del ENUM desde la base de datos
         $type = DB::select("SHOW COLUMNS FROM tracking WHERE Field = 'estado_actual'")[0]->Type;
-
+    
         // Extraer los valores de ENUM y convertirlos a un array
         preg_match('/^enum\((.*)\)$/', $type, $matches);
         $enumValues = array_map(function ($value) {
             return trim($value, "'");
         }, explode(',', $matches[1]));
-
+    
         return view('admin.tracking.show', compact('tracking', 'enumValues'));
     }
-
-
+    public function detalleAdmin($id)
+    {
+        // Obtener el tracking con sus relaciones necesarias
+        $tracking = Tracking::with(['venta.usuario', 'venta.detalles.producto', 'venta.detalles.servicio'])->findOrFail($id);
+    
+        // Retornar la vista de detalles del tracking
+        return view('admin.tracking.detalle', compact('tracking'));
+    }
     // Actualizar el estado del tracking
     public function updateTracking(Request $request, $id)
 {
@@ -87,30 +99,57 @@ class TrackingController extends Controller
         'fecha_despacho' => 'nullable|date',
     ]);
 
-    // Actualizar los campos permitidos
+    // Formatear fecha_despacho al guardar
     $tracking->update([
         'estado_actual' => $request->estado_actual,
-        'fecha_despacho' => $request->fecha_despacho,
+        'fecha_despacho' => $request->fecha_despacho ? date('Y-m-d H:i:s', strtotime($request->fecha_despacho)) : null,
     ]);
-
-    // Actualizar el estado en la tabla venta
-    $venta = $tracking->venta;
-    if ($venta) {
-        $venta->update(['estado' => $request->estado_actual]);
-    }
 
     return redirect()->route('admin.tracking.index')->with('success', 'El tracking ha sido actualizado exitosamente.');
 }
-public function confirmarDespacho($id)
+    // Confirmar despacho de un pedido
+    public function confirmarDespacho($id)
+    {
+        $tracking = Tracking::findOrFail($id);
+
+        // Actualizar la fecha de despacho con la hora actual
+        $tracking->update([
+            'fecha_despacho' => now(),
+        ]);
+
+        return redirect()->route('admin.tracking.show', $id)->with('success', 'La fecha de despacho ha sido registrada exitosamente.');
+    }
+    public function detalle($id)
 {
-    $tracking = Tracking::findOrFail($id);
+    // Buscar el tracking por ID
+    $tracking = Tracking::with('venta')->findOrFail($id);
 
-    // Actualizar la fecha de despacho con la hora actual
-    $tracking->update([
-        'fecha_despacho' => now(),
-    ]);
+    // Verificar si el usuario autenticado es el dueño del pedido
+    if ($tracking->venta->id_usuario !== Auth::id()) {
+        return redirect()->route('tracking.mostrar')->with('error', 'No tienes acceso a este detalle.');
+    }
 
-    return redirect()->route('admin.tracking.show', $id)->with('success', 'La fecha de despacho ha sido registrada exitosamente.');
+    // Calcular el progreso dinámico basado en el estado actual
+    $estados = ['Preparando envío', 'En proceso', 'Enviado', 'Entregado'];
+    $estadoActual = array_search($tracking->estado_actual, $estados); // Posición del estado actual en el array
+    $progressPercentage = ($estadoActual / (count($estados) - 1)) * 100; // Porcentaje de progreso
+
+    // Obtener los detalles del pedido (productos y servicios)
+    $detalles = DetallePedido::where('id_pedido', $tracking->venta->id_pedido)->get();
+    $productos = $detalles->filter(fn($detalle) => !is_null($detalle->id_producto));
+    $servicios = $detalles->filter(fn($detalle) => !is_null($detalle->id_servicio));
+
+    // Retornar la vista con los datos necesarios
+    return view('aroma.tracking-detalle', compact('tracking', 'productos', 'servicios', 'estados', 'progressPercentage'));
 }
-
+    public function verTracking($id)
+    {
+        // Obtener el tracking con sus relaciones necesarias
+        $tracking = Tracking::with(['venta.usuario', 'venta.detalles.producto', 'venta.detalles.servicio'])->findOrFail($id);
+    
+        // Retornar la vista de detalles del tracking
+        return view('admin.tracking-detalle', compact('tracking'));
+    }
+    
+    
 }

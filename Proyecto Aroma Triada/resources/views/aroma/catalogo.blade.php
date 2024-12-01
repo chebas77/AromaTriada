@@ -36,7 +36,7 @@
       </ul>
       <button
         type="submit"
-        class="mt-4 w-full bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded font-bold focus:outline-none">
+        class="mt-4 w-full bg-red-600 hover:bg-blue-600 text-white px-4 py-2 rounded font-bold focus:outline-none">
         Filtrar
       </button>
     </form>
@@ -59,7 +59,7 @@
         @foreach($productos as $producto)
         <div class="bg-white shadow p-4 rounded">
           <div class="bg-gray-300 h-40 mb-4">
-            <img src="{{ $producto->imagen ? asset('storage/' . $producto->imagen) : asset('images/placeholder.png') }}"
+            <img src="{{ $producto->imagen ? asset( $producto->imagen) : asset('images/placeholder.png') }}"
               alt="{{ $producto->nombre }}" class="h-full w-full object-cover rounded">
           </div>
           <h4 class="text-sm font-bold text-gray-500">{{ $producto->categoria->nombre ?? 'Sin categoría' }}</h4>
@@ -68,7 +68,7 @@
 
           <!-- Botón que redirige al detalle del producto -->
           <a href="{{ route('detalle.item', ['tipo' => 'producto', 'id' => $producto->id_producto]) }}"
-            class="bg-blue-500 text-white px-6 py-2 font-bold hover:bg-blue-600 w-full rounded inline-block text-center">
+            class="bg-red-600 text-white px-6 py-2 font-bold hover:bg-blue-600 w-full rounded inline-block text-center">
             Ir a comprar
           </a>
         </div>

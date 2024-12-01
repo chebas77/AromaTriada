@@ -15,7 +15,8 @@ class Venta extends Model
 
 
     protected $fillable = [
-        'fecha', 'estado', 'total', 'id_usuario', 'metodo_pago'
+        'fecha', 'estado', 'total', 'id_usuario', 'metodo_pago',
+        'metodo_entrega', 'direccion_entrega'
     ];
     protected $casts = [
         'fecha' => 'datetime', // Convierte automáticamente el campo `fecha` a una instancia de Carbon

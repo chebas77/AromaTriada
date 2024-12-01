@@ -26,7 +26,7 @@ class Tracking extends Model
         'fecha_entrega' => 'datetime',
     ];
 
-    const ESTADOS = ['En proceso', 'Enviado', 'Entregado', 'Cancelado'];
+    const ESTADOS = ['Preparando envío','En proceso', 'Enviado', 'Entregado', 'Cancelado'];
 
     public function setEstadoActualAttribute($value)
     {

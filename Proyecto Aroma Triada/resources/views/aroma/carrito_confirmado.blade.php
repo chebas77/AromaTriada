@@ -65,6 +65,8 @@
                 Confirmar y Proceder al Pago
             </button>
 
+
+                
             <!-- Información confirmada -->
             <div id="info-confirmada" class="hidden mt-6 bg-green-100 p-4 rounded-lg">
                 <h4 class="text-lg font-bold">Método de Entrega Confirmado</h4>

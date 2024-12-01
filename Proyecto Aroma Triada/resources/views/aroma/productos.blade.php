@@ -8,7 +8,7 @@
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
         <!-- Imagen -->
         <div class="bg-gray-200 h-80 flex items-center justify-center rounded">
-            <img src="{{ $item->imagen ? asset('storage/' . $item->imagen) : asset('images/placeholder.png') }}"
+            <img src="{{ $item->imagen ? asset($item->imagen) : asset('images/placeholder.png') }}"
                 alt="{{ $item->nombre }}" class="h-full w-full object-cover">
         </div>
 

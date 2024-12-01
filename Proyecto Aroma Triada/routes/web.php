@@ -22,6 +22,7 @@ Route::prefix('catalogo')->group(function () {
 });
 
 
+
 Route::get('/carrito/confirmar', [CarritoController::class, 'confirmarCarrito'])->name('carrito.confirmar');
 Route::post('/carrito/procesar', [CarritoController::class, 'procesarCarrito'])->name('carrito.procesar');
 
@@ -33,31 +34,37 @@ Route::prefix('carrito')->group(function () {
     Route::get('/detalle/{tipo}/{id}', [CarritoController::class, 'mostrarDetalle'])->name('detalle.item');
 
     Route::post('/agregar-servicios', [CarritoController::class, 'agregarServicios'])->name('carrito.agregarServicios');
-    Route::post('/confirmar', [CarritoController::class, 'confirmarCarrito'])->name('carrito.confirmar');
+    Route::post('/carrito/confirmar', [CarritoController::class, 'confirmarCarrito'])->name('carrito.confirmar');
+
     Route::patch('/actualizar', [CarritoController::class, 'actualizarCantidad'])->name('carrito.actualizar');
     Route::delete('/eliminar', [CarritoController::class, 'eliminar'])->name('carrito.eliminar');
     Route::post('/personalizar-entrega', [CarritoController::class, 'personalizarEntrega'])->name('carrito.personalizarEntrega');
-   
+    Route::post('/carrito/metodo-entrega', [CarritoController::class, 'guardarMetodoEntrega'])->name('carrito.metodo_entrega');
     Route::match(['get', 'post'], '/carrito/confirmar', [CarritoController::class, 'confirmarCarrito'])->name('carrito.confirmar');
-Route::post('/carrito/metodo-entrega', [CarritoController::class, 'guardarMetodoEntrega'])->name('carrito.metodo_entrega');
 Route::post('/carrito/procesar', [CarritoController::class, 'procesarCarrito'])->name('carrito.procesar');
 
 });
 
+
+
 // Rutas de servicios
 Route::get('/servicios', [CarritoController::class, 'mostrarServicios'])->name('servicios.mostrar');
+Route::middleware(['auth'])->prefix('payment')->group(function () {
+    Route::post('/checkout', [PaymentController::class, 'checkout'])->name('checkout'); // Procesar el pago
+});
 
 // Rutas de pago
 Route::middleware(['auth'])->prefix('payment')->group(function () {
-    Route::post('/checkout', [PaymentController::class, 'checkout'])->name('checkout'); // Procesar el pago
     Route::get('/success', [PaymentController::class, 'success'])->name('payment.success'); // Éxito
     Route::get('/cancel', [PaymentController::class, 'cancel'])->name('payment.cancel'); // Cancelación
 });
 
 
 // Rutas para el tracking
+// Ruta para ver el tracking del usuario (vista de usuario)
 Route::middleware(['auth'])->prefix('tracking')->group(function () {
     Route::get('/', [TrackingController::class, 'mostrar'])->name('tracking.mostrar');
+    Route::get('/detalle/{id}', [TrackingController::class, 'detalle'])->name('tracking.detalle'); // Ruta correcta
 });
 
 // Grupo de rutas para el controlador AromaController
@@ -113,13 +120,21 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
 
     // Visualización de ventas/pedidos
     Route::get('ventas', [AdminController::class, 'verPedidos'])->name('admin.verPedidos');
+    Route::get('/admin/ventas/{id}', [AdminController::class, 'verDetalle'])->name('admin.ventas.detalle');
+    Route::get('/admin/tracking/{id}', [AdminController::class, 'verTracking'])->name('admin.tracking.detalle');
 
+    // Ruta para la vista de administrador para listar todos los trackings
     Route::prefix('admin')->middleware(['auth'])->group(function () {
-        Route::get('/admin/tracking', [TrackingController::class, 'index'])->name('admin.tracking.index');
+        // Listar todos los trackings
+        Route::get('/tracking', [TrackingController::class, 'indexAdmin'])->name('admin.tracking.index');
+        Route::put('/admin/tracking/{id}', [AdminController::class, 'actualizarTracking'])->name('admin.tracking.actualizar');
 
-       Route::get('/admin/tracking/{id}', [TrackingController::class, 'gestionarTracking'])->name('admin.tracking.show');
-Route::post('/admin/tracking/{id}', [TrackingController::class, 'updateTracking'])->name('admin.tracking.update');
-Route::post('/admin/tracking/{id}/despacho', [TrackingController::class, 'confirmarDespacho'])->name('admin.tracking.despacho');
-
+        // Ver detalles de un tracking
+        Route::get('/tracking/detalle/{id}', [TrackingController::class, 'detalleAdmin'])->name('admin.tracking.detalle');
+    
+        // Gestionar un tracking (cambiar estados o datos)
+        Route::get('/tracking/gestionar/{id}', [TrackingController::class, 'gestionarTracking'])->name('admin.tracking.show');
+        Route::post('/tracking/gestionar/{id}', [TrackingController::class, 'updateTracking'])->name('admin.tracking.update');
     });
+    
 });

@@ -12,8 +12,9 @@ class Producto extends Model
     protected $table = 'productos'; // Tabla productos
     protected $primaryKey = 'id_producto'; // Llave primaria
 
-    protected $fillable = ['nombre', 'descripcion', 'precio', 'disponibilidad', 'tipo_producto', 'id_categoria'];
+    protected $fillable = ['nombre', 'descripcion', 'precio', 'disponibilidad', 'tipo_producto', 'id_categoria','imagen'];
 
+    
     public function categoria()
     {
         return $this->belongsTo(Categoria::class, 'id_categoria', 'id_categoria');

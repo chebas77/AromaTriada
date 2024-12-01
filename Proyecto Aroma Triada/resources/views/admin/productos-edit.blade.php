@@ -45,12 +45,31 @@
             <label for="imagen" class="block text-gray-700 font-bold">Imagen</label>
             @if ($producto->imagen)
                 <div class="mb-4">
-                    <img src="{{ asset('storage/' . $producto->imagen) }}" alt="Imagen del producto" class="w-32 h-32 object-cover rounded">
+                    <img src="{{ asset($producto->imagen) }}" alt="Imagen del producto" class="w-32 h-32 object-cover rounded">
+                    <p class="text-sm text-gray-600 mt-2">Imagen actual</p>
                 </div>
             @endif
             <input type="file" id="imagen" name="imagen" accept="image/*"
                    class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500">
+            <p class="text-sm text-gray-600 mt-2">Sube una nueva imagen para reemplazar la existente</p>
             @error('imagen')
+                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+            @enderror
+        </div>
+
+        <!-- Categoría -->
+        <div>
+            <label for="id_categoria" class="block text-gray-700 font-bold">Categoría</label>
+            <select id="id_categoria" name="id_categoria" required class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500">
+                <option value="">Seleccione una categoría</option> <!-- Opción predeterminada vacía -->
+                @foreach($categorias as $categoria)
+                    <option value="{{ $categoria->id }}" 
+                        {{ old('id_categoria', $producto->id_categoria) == $categoria->id ? 'selected' : '' }}>
+                        {{ $categoria->nombre }}
+                    </option>
+                @endforeach
+            </select>
+            @error('id_categoria')
                 <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
             @enderror
         </div>
