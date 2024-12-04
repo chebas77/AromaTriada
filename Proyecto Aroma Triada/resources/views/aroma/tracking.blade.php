@@ -13,7 +13,7 @@
             <p><strong>Destino:</strong> {{ $item->destino }}</p>
             <p><strong>Estado Actual:</strong> {{ $item->estado_actual }}</p>
             <p><strong>Fecha de Despacho:</strong> {{ $item->fecha_despacho ?? 'Pendiente' }}</p>
-            <p><strong>Fecha de Entrega:</strong> {{ $item->fecha_entrega ?? 'Pendiente' }}</p>
+            <p><strong>Fecha de Entrega:</strong> {{ $item->fecha_entrega ? $item->fecha_entrega->format('Y-m-d') : 'Pendiente' }}</p>
             <p><strong>Hora Programada:</strong> {{ $item->hora_programada ?? 'Pendiente' }}</p>
             <a href="{{ route('tracking.detalle', $item->id_tracking) }}" 
                class="block mt-4 bg-blue-600 text-white text-center py-2 rounded hover:bg-blue-700 transition-colors">

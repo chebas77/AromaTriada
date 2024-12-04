@@ -1,137 +1,127 @@
+INDEX
+
 @extends('recursos.app')
   @section('title', 'Index')
 
   @section('content')
 
-  <!-- Hero Section -->
-  <section class="bg-cover bg-center py-32 text-center" style="background-image: url({{ asset('images/navidadfondo.jpg') }}); background-size: cover; background-position: center;">
+  <section class="bg-cover bg-center py-48 text-center" style="background-image: url({{ asset('images/navidadfondo.jpg') }}); background-size: cover; background-position: center;">
   <div class="flex justify-end px-6 py-16 w-full">
-    <!-- Contenedor preventa con fondo blanco y texto rojo -->
-    <div class="bg-white text-red-600 px-12 py-8 sm:max-h-screen w-[400px] max-h-fit">
-      <h2 class="text-3xl font-bold mb-4 text-right">¡Aprovecha nuestra preventa!</h2>
-      <p class="text-lg mb-6 text-right">No te pierdas las ofertas exclusivas disponibles solo por tiempo limitado.</p>
-      <a href="#" class="bg-red-600 text-white px-6 py-2 font-bold hover:bg-red-700 rounded">¡Compra Ahora!</a>
-    </div>
-  </div>
 </section>
 
- 
+<!-- Featured Collection Carousel -->
+<section class="container mx-auto py-12 px-6 text-center">
+  <h2 class="text-2xl font-bold mb-6">COLECCIÓN DESTACADA</h2>
 
-  <!-- Featured Collection Carousel -->
-  <section class="container mx-auto py-12 px-6 text-center">
-    <h2 class="text-2xl font-bold mb-6">Colección Destacada</h2>
-
-    <!-- Swiper -->
-    <div class="swiper-container">
-      <div class="swiper-wrapper">
-        <!-- Product Cards in the carousel -->
-        @foreach ($productosDestacados as $producto)
-        <div class="bg-white shadow p-4 rounded">
-          <img src="{{ asset($producto->imagen) }}" alt="{{ $producto->nombre }}" class="h-40 w-full object-cover mb-4">
-          <h3 class="text-sm font-bold text-gray-500">{{ $producto->categoria->nombre ?? 'Sin categoría' }}</h3>
-          <p class="text-gray-800 mb-2">{{ $producto->nombre }}</p>
-          <p class="text-gray-700 font-bold mb-4">S/{{ number_format($producto->precio, 2) }}</p>
-        </div>
-        @endforeach
-      </div>
-      <!-- Add Pagination and Navigation if needed -->
-      <div class="swiper-pagination"></div>
-      <div class="swiper-button-next"></div>
-      <div class="swiper-button-prev"></div>
-    </div>
-  </section>
-
-  <!-- Swiper Initialization -->
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      new Swiper('.swiper-container', {
-        slidesPerView: 1, // Number of slides to show
-        spaceBetween: 10, // Space between slides
-        loop: true, // Infinite loop
-        navigation: {
-          nextEl: '.swiper-button-next',
-          prevEl: '.swiper-button-prev',
-        },
-        pagination: {
-          el: '.swiper-pagination',
-          clickable: true,
-        },
-        breakpoints: {
-          640: {
-            slidesPerView: 1,
-            spaceBetween: 20
-          },
-          768: {
-            slidesPerView: 2,
-            spaceBetween: 40
-          },
-          1024: {
-            slidesPerView: 3,
-            spaceBetween: 50
-          },
-        }
-      });
-    });
-  </script>
-
-  <section class="container mx-auto py-12 px-8 text-center">
-    <h2 class="text-2xl font-bold mb-6">Principales Categorías</h2>
-    <div class="flex flex-wrap justify-center gap-15">
-      <!-- Category Buttons with Toggle -->
-      @foreach ($categorias as $categoria)
-      <div class="text-center">
-        <button onclick="toggleDescription('{{ $categoria->id_categoria }}')"
-          class="bg-gray-300 py-2 px-4 rounded font-bold text-lg focus:outline-none">
-          {{ $categoria->nombre }}
-        </button>
-        <div id="description-{{ $categoria->id_categoria }}"
-          class="hidden bg-gray-100 p-2 rounded mt-2 text-sm text-gray-700">
-          {{ $categoria->descripcion ?? 'Descripción de la categoría' }}
-        </div>
+  <!-- Swiper -->
+  <div class="swiper mySwiper">
+    <div class="swiper-wrapper">
+      <!-- Product Cards in the carousel -->
+      @foreach ($productosDestacados as $producto)
+      <div class="swiper-slide bg-white shadow p-4 rounded relative group">
+        <!-- Imagen del producto -->
+        <img src="{{ asset($producto->imagen) }}" alt="{{ $producto->nombre }}" class="h-40 w-full object-cover mb-4 group-hover:opacity-40 transition duration-300">
+        
+        <!-- Información del producto -->
+        <!--<h3 class="text-sm font-bold text-gray-500">{{ $producto->categoria->nombre ?? 'Sin categoría' }}</h3>-->
+        <p class="text-gray-800 mb-2 font-bold">{{ $producto->nombre }}</p>
+        <!--<p class="text-gray-700 font-bold mb-4">S/{{ number_format($producto->precio, 2) }}</p>-->
+        
+        <!-- Botón de comprar que aparece con el hover -->
+        <!-- Actualizando el enlace para redirigir al carrito -->
+        <a href="{{ route('detalle.item', ['tipo' => 'producto', 'id' => $producto->id_producto]) }}" class="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-red-600 text-white py-2 px-6 rounded opacity-0 group-hover:opacity-100 transition-all duration-500 ease-out group-hover:translate-y-0 group-hover:scale-100 group-hover:translate-y-10">
+          Comprar
+        </a>
       </div>
       @endforeach
     </div>
-  </section>
 
-  <script>
-    function toggleDescription(id) {
-      const description = document.getElementById('description-' + id);
-      description.classList.toggle('hidden');
-    }
-  </script>
+    <!-- Paginación -->
+     <br><br>
+    <div class="swiper-pagination"></div>
+  </div>
+</section>
 
-  <!-- Swiper Initialization for Categories -->
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      new Swiper('.swiper-container-categories', {
-        slidesPerView: 1, // Number of slides to show
-        spaceBetween: 10, // Space between slides
-        loop: true, // Infinite loop
-        navigation: {
-          nextEl: '.swiper-button-next',
-          prevEl: '.swiper-button-prev',
+  <!-- Swiper Initialization -->
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const swiper = new Swiper('.mySwiper', {
+      slidesPerView:4, // Número de productos visibles
+      spaceBetween: 40, // Espaciado entre los productos
+      loop: true, // Carrusel infinito
+      autoplay: {
+        delay: 2000, // Tiempo entre cada deslizamiento
+        disableOnInteraction: false, // No desactivar al interactuar
+      },
+      pagination: {
+        el: '.swiper-pagination', // Los puntos de navegación
+        clickable: true, // Hacer los puntos clickeables
+      },
+      breakpoints: {
+        640: {
+          slidesPerView: 1, // En pantallas pequeñas, muestra solo 1 producto
+          spaceBetween: 10, // Menor espacio entre los productos
         },
-        pagination: {
-          el: '.swiper-pagination',
-          clickable: true,
+        768: {
+          slidesPerView: 2, // En pantallas medianas, muestra 2 productos
+          spaceBetween: 20,
         },
-        breakpoints: {
-          640: {
-            slidesPerView: 2,
-            spaceBetween: 20
-          },
-          768: {
-            slidesPerView: 3,
-            spaceBetween: 30
-          },
-          1024: {
-            slidesPerView: 4,
-            spaceBetween: 40
-          },
+        1024: {
+          slidesPerView: 5, // En pantallas grandes, muestra 4 productos
+          spaceBetween: 40,
         }
-      });
+      }
     });
-  </script>
+  });
+</script>
+
+ <!-- PRINCIPALES CATEGPRIAS -->
+ <section class="container mx-auto py-12 px-8 text-center">
+  <h2 class="text-2xl font-bold mb-6">PRINCIPALES CATEGORÍAS</h2>
+
+  <!-- Static Categories -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+    <!-- Category 1: TORTAS -->
+    <a href="{{ route('aroma.catalogo', ['categorias' => [1]]) }}" class="relative group bg-white shadow rounded overflow-hidden">
+      <img src="{{ asset('images/1.jpg') }}" alt="TORTAS" class="w-full h-96 object-cover group-hover:opacity-80 transition duration-300">
+      <div class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-30 opacity-0 group-hover:opacity-40 transition duration-300">
+        <span class="text-white font-bold text-lg">Ver los productos</span>
+      </div>
+      <div class="p-4">
+        <h3 class="text-lg font-bold uppercase">TORTAS</h3>
+      </div>
+    </a>
+
+    <!-- Category 2: BOCADITOS -->
+    <a href="{{ route('aroma.catalogo', ['categorias' => [2]]) }}" class="relative group bg-white shadow rounded overflow-hidden">
+      <img src="{{ asset('images/2.jpg') }}" alt="BOCADITOS" class="w-full h-96 object-cover group-hover:opacity-80 transition duration-300">
+      <div class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-30 opacity-0 group-hover:opacity-40 transition duration-300">
+        <span class="text-white font-bold text-lg">Ver los productos</span>
+      </div>
+      <div class="p-4">
+        <h3 class="text-lg font-bold uppercase">BOCADITOS</h3>
+      </div>
+    </a>
+
+    <!-- Category 3: BOXES -->
+    <a href="{{ route('aroma.catalogo', ['categorias' => [3]]) }}" class="relative group bg-white shadow rounded overflow-hidden">
+      <img src="{{ asset('images/3.jpg') }}" alt="BOXES" class="w-full h-96 object-cover group-hover:opacity-80 transition duration-300">
+      <div class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-30 opacity-0 group-hover:opacity-40 transition duration-300">
+        <span class="text-white font-bold text-lg">Ver los productos</span>
+      </div>
+      <div class="p-4">
+        <h3 class="text-lg font-bold uppercase">BOXES</h3>
+      </div>
+    </a>
+  </div>
+
+  <!-- Button -->
+  <div class="mt-8">
+    <a href="/catalogo" class="bg-red-600 text-white py-2 px-6 rounded text-lg font-bold hover:bg-gray-800">
+      VER CATÁLOGO
+    </a>
+  </div>
+</section>
 
   <!-- Why Us Section -->
   <section class="bg-gray-200 py-16 text-center">

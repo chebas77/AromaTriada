@@ -12,7 +12,7 @@
             <p class="mb-2"><strong>Origen:</strong> {{ $tracking->origen }}</p>
             <p class="mb-2"><strong>Destino:</strong> {{ $tracking->destino }}</p>
             <p class="mb-2"><strong>Fecha de Despacho:</strong> {{ $tracking->fecha_despacho ?? 'Pendiente' }}</p>
-            <p class="mb-2"><strong>Fecha de Entrega:</strong> {{ $tracking->fecha_entrega ?? 'Pendiente' }}</p>
+            <p class="mb-2"><strong>Fecha de Entrega:</strong> {{ $tracking->fecha_entrega ? $tracking->fecha_entrega->format('Y-m-d') : 'Pendiente' }}</p>
             <p class="mb-2"><strong>Hora Programada:</strong> {{ $tracking->hora_programada ?? 'Pendiente' }}</p>
         </div>
 

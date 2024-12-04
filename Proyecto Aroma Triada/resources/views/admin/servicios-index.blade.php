@@ -21,7 +21,7 @@
                 <tr class="hover:bg-gray-50">
                     <td class="border px-4 py-2">{{ $servicio->nombre }}</td>
                     <td class="border px-4 py-2">{{ $servicio->descripcion }}</td>
-                    <td class="border px-4 py-2">${{ number_format($servicio->precio, 2) }}</td>
+                    <td class="border px-4 py-2">S/ {{ number_format($servicio->precio, 2) }}</td>
                     <td class="border px-4 py-2 flex space-x-2">
                         <a href="{{ route('admin.editarServicio', $servicio) }}" 
                            class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded">

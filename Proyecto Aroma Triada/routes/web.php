@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
 
-
+Route::get('/productos-destacados', [ProductoController::class, 'destacados'])->name('productos.destacados');
 // Ruta principal
 Route::get('/', [AromaController::class, 'index'])->name('aroma.index');
 
@@ -29,13 +29,25 @@ Route::post('/carrito/procesar', [CarritoController::class, 'procesarCarrito'])-
 
 // Rutas del carrito
 Route::prefix('carrito')->group(function () {
-    Route::get('/', [CarritoController::class, 'mostrarCarrito'])->name('carrito.mostrar');
-    Route::post('/agregar', [CarritoController::class, 'agregar'])->name('carrito.agregar');
+    Route::match(['get', 'post'],'/', [CarritoController::class, 'mostrarCarrito'])->name('carrito.mostrar');
+    Route::post('/agregar', [CarritoController::class, 'agregaralCarrito'])->name('carrito.agregar');
     Route::get('/detalle/{tipo}/{id}', [CarritoController::class, 'mostrarDetalle'])->name('detalle.item');
 
     Route::post('/agregar-servicios', [CarritoController::class, 'agregarServicios'])->name('carrito.agregarServicios');
     Route::post('/carrito/confirmar', [CarritoController::class, 'confirmarCarrito'])->name('carrito.confirmar');
 
+    Route::post('/carrito/confirmar', [CarritoController::class, 'confirmarCarrito'])->name('carrito.confirmar');
+
+// Ruta para la vista de delivery
+Route::get('/carrito/delivery', function() {
+    return view('carrito.delivery');
+})->name('carrito.delivery');
+
+// Ruta para la vista de recoger en tienda
+Route::get('/carrito/recoger', function() {
+    return view('carrito.recoger');
+})->name('carrito.recoger');
+    Route::post('/carrito/guardar', [CarritoController::class, 'guardarDatosCarrito'])->name('carrito.guardar');
     Route::patch('/actualizar', [CarritoController::class, 'actualizarCantidad'])->name('carrito.actualizar');
     Route::delete('/eliminar', [CarritoController::class, 'eliminar'])->name('carrito.eliminar');
     Route::post('/personalizar-entrega', [CarritoController::class, 'personalizarEntrega'])->name('carrito.personalizarEntrega');

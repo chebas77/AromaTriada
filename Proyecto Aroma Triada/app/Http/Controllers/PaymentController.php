@@ -15,49 +15,63 @@ class PaymentController extends Controller
 {
     //se encarga de integrar el flujo de pago, registrar las ventas, procesar detalles de los pedidos, registrar pagos, y seguimiento para envíos.
     public function checkout(Request $request)
-    {
-        
-        session([
-            'metodo_entrega' => $request->input('metodo_entrega') === 'Recoger en tienda' ? 'Recogo en tienda' : 'Delivery',
-            'direccion_entrega' => $request->input('direccion_entrega'),
-            'fecha_entrega' => $request->input('fecha_entrega'),
-            'hora_entrega' => $request->input('hora_entrega'),
-            'total_carrito' => $request->input('total_carrito'),
-        ]);
-        // Configurar Stripe
-        Stripe::setApiKey(config('services.stripe.secret'));
+{
+    // Verificamos si la dirección es "Recoger en tienda"
+    $metodoEntrega = $request->input('direccion_entrega') === 'Recoger en tienda' 
+        ? 'Recojo en tienda' 
+        : 'Delivery';
+    
 
-        // Obtener el carrito de la sesión
-        $carrito = session('carrito', []);
-        $lineItems = [];
+    
+    // Ahora guardamos la información en la sesión, incluyendo el nuevo método de entrega
+    session([
+        'metodo_entrega' => $metodoEntrega, // Asignamos el método de entrega basado en la dirección
+        'direccion_entrega' => $request->input('direccion_entrega'),
+        'fecha_entrega' => $request->input('fecha_entrega'),
+        'hora_entrega' => $request->input('hora_entrega'),
+        'total_carrito' => $request->input('total_carrito'),
+    ]);
 
-        // Configurar cada producto/servicio para Stripe
-        foreach ($carrito as $item) {
-            $lineItems[] = [
-                'price_data' => [
-                    'currency' => 'pen',
-                    'product_data' => [
-                        'name' => $item['nombre'],
-                    ],
-                    'unit_amount' => $item['precio_unitario'] * 100, // Convertir a centavos
+    
+    // Debugging: para ver los valores recibidos (opcional)
+    
+
+    // Configuración de Stripe
+    Stripe::setApiKey(config('services.stripe.secret'));
+
+    // Obtener el carrito de la sesión
+    $carrito = session('carrito', []);
+    $lineItems = [];
+
+    // Configurar cada producto/servicio para Stripe
+    foreach ($carrito as $item) {
+        $lineItems[] = [
+            'price_data' => [
+                'currency' => 'pen',
+                'product_data' => [
+                    'name' => $item['nombre'],
                 ],
-                'quantity' => $item['cantidad'],
-            ];
-        }
-
-        // Crear la sesión de Stripe Checkout
-        $session = Session::create([
-            'payment_method_types' => ['card'],
-            'line_items' => $lineItems,
-            'mode' => 'payment',
-            'success_url' => route('payment.success') . '?session_id={CHECKOUT_SESSION_ID}',
-            'cancel_url' => route('payment.cancel'),
-        ]);
-
-        // Redirigir al usuario a Stripe Checkout
-        return redirect($session->url, 303);
+                'unit_amount' => $item['precio_unitario'] * 100, // Convertir a centavos
+            ],
+            'quantity' => $item['cantidad'],
+        ];
     }
 
+    // Crear la sesión de Stripe Checkout
+    $session = Session::create([
+        'payment_method_types' => ['card'],
+        'line_items' => $lineItems,
+        'mode' => 'payment',
+        'success_url' => route('payment.success') . '?session_id={CHECKOUT_SESSION_ID}',
+        'cancel_url' => route('payment.cancel'),
+    ]);
+
+    // Redirigir al usuario a Stripe Checkout
+    return redirect($session->url, 303);
+}
+
+
+    
     public function success(Request $request)
     {
 
@@ -88,7 +102,6 @@ class PaymentController extends Controller
                 'total_carrito' => $total_carrito,
                 'metodo_entrega' => $metodo_entrega,
             ]);
-
             return $this->guardarVenta($request);
 
             return redirect()->route('tracking.mostrar')->with('success', 'Pago exitoso. Aquí está tu información de envío.');
@@ -127,7 +140,7 @@ class PaymentController extends Controller
             'id_servicio' => $item['tipo'] === 'servicio' ? $item['id'] : null,
             'cantidad' => $item['cantidad'],
             'precio_unitario' => $item['precio_unitario'],
-            'tamaño' => $item['tamaño'] ?? null, // Tamaño si aplica
+            'tamaño' => $item['tamano'] ?? null, // Tamaño si aplica
             'dedicatoria' => $item['dedicatoria'] ?? null, // Dedicatoria si aplica
         ]);
     }

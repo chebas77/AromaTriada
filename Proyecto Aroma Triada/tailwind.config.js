@@ -6,9 +6,19 @@ import typography from '@tailwindcss/typography';
 export default {
     content: [
         './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
-        './vendor/laravel/jetstream/**/*.blade.php',
+        './vendor/laravel/jetstream/*/.blade.php',
         './storage/framework/views/*.php',
-        './resources/views/**/*.blade.php',
+        './resources/views/*/.blade.php',
+        './node_modules/swiper/swiper-bundle.min.js',
+    ],
+    safelist: [
+        'swiper-container',
+        'swiper-wrapper',
+        'swiper-slide',
+        'swiper-pagination',
+        'swiper-pagination-bullet',
+        'swiper-button-next',
+        'swiper-button-prev',
     ],
 
     theme: {

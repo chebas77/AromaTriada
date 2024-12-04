@@ -36,28 +36,35 @@ class AromaController extends Controller
 }
     
 
-    public function index()
-    {
-        // Obtener todos los productos destacados (puedes personalizar esta lógica)
-        $productosDestacados = Producto::all();
+public function index()
+{
+    // Obtener todos los productos destacados (puedes personalizar esta lógica)
+    $productosDestacados = Producto::all();
 
-        // Obtener todas las categorías
-        $categorias = Categoria::all();
+    // Obtener todas las categorías
+    $categorias = Categoria::all();
 
-        // Verificar si hay productos destacados para mostrar en la vista de inicio
-        if ($productosDestacados->isEmpty()) {
-            return "No se encontraron productos";  // Mensaje útil para depuración
-        }
-
-        // Pasar los datos a la vista
-        return view('aroma.index', compact('productosDestacados', 'categorias'));
+    // Verificar si hay productos destacados para mostrar en la vista de inicio
+    if ($productosDestacados->isEmpty()) {
+        return "No se encontraron productos";  // Mensaje útil para depuración
     }
+
+    // Pasar los datos a la vista
+    return view('aroma.index', compact('productosDestacados', 'categorias'));
+
+    //para verificar lo del carrusel
+
+    $productos = Producto::where('destacado', true)->get();
+    
+    return view('aroma.index', compact('productos'));
+}
 
 
     public function carrito()
     {
+        $servicios=Servicio::all();
         // Aquí puedes agregar la lógica para mostrar el carrito
-        return view('aroma.carrito');
+        return view('aroma.carrito', compact('servicios'));
     }
     public function perfil()
     {
