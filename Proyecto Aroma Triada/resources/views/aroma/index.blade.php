@@ -1,5 +1,3 @@
-INDEX
-
 @extends('recursos.app')
   @section('title', 'Index')
 
