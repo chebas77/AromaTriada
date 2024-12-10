@@ -1,7 +1,20 @@
+@import url('https://fonts.bunny.net/css?family=fascinate:400');
 @import 'swiper/swiper-bundle.css';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.logo {
+  text-decoration: none; /* Elimina subrayado */
+  font-family: 'Fascinate', cursive; /* Fuente personalizada */
+  font-size: 2.8rem; /* Ajusta el tamaño de la fuente */
+  color: #ffffff; /* Color predeterminado */
+}
+
+.logo:hover {
+  color: #f3f3f3; /* Cambia el color cuando pasas el mouse */
+  text-decoration: none; /* Asegura que no se agregue subrayado al hacer hover */
+}
 
 [x-cloak] {
     display: none;
@@ -12,8 +25,9 @@ header {
   color: black;
 }
 
-header nav a:hover {
-  text-decoration: underline;
+/* Esto para eliminar el subrayado en cualquier otro hover de enlaces */
+a:hover {
+  text-decoration: none;
 }
 
 input[type="text"] {

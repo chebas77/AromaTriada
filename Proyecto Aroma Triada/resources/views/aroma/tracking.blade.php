@@ -4,7 +4,7 @@
 
 @section('content')
 <section class="container mx-auto py-12 px-6">
-    <h1 class="text-3xl font-bold mb-8 text-center">Estado de tu Envío</h1>
+    <h1 class="text-3xl font-bold text-violeta mb-8 text-center">ESTADO DE TU ENVÍO</h1>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         @foreach($tracking as $item)
         <div class="bg-white shadow-lg rounded-lg p-6 hover:shadow-xl transition-shadow">

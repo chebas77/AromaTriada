@@ -2,6 +2,8 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Autenticación')</title>
@@ -13,10 +15,8 @@
     @include('recursos.header_auth') <!-- Incluye header_auth.blade.php para autenticación -->
 
     <!-- Contenido Principal -->
-    <main class="flex-grow flex items-center justify-center py-12 bg-gray-100">
-        <div class="w-full max-w-md bg-white shadow-xl rounded-lg p-8">
-            @yield('content') <!-- Aquí se insertará el contenido específico de cada vista -->
-        </div>
+    <main class="flex-grow flex items-center justify-center">
+        @yield('content') <!-- Aquí se insertará el contenido específico de cada vista -->
     </main>
 
     <!-- Footer Especializado para Autenticación -->

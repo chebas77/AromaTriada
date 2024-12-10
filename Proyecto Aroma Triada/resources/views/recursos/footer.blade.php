@@ -1,62 +1,73 @@
 @vite('resources/css/app.css')
-<footer class="bg-black text-white w-full mt-12 py-8">
+<footer class="bg-violeta text-white w-full mt-12 py-8">
   <div class="container mx-auto flex flex-wrap text-center md:text-left md:items-start">
+
+  <!-- Navegación -->
+  <div class="w-full md:w-1/3 flex flex-col items-start mt-16">
+  <a href="{{ route('aroma.index') }}" class="logo no-underline">
+        AROMA TRIADA
+    </a>
+    </div>
 
     <!-- Navegación -->
     <div class="w-full md:w-1/4 flex flex-col items-start">
-      <h3 class="font-bold mb-4 text-lg">Navegación</h3>
-      <ul class="space-y-2 text-gray-400">
-        <li><a href="{{ route('aroma.index') }}" class="hover:text-white">Inicio</a></li>
-        <li><a href="{{ route('aroma.catalogo') }}" class="hover:text-white">Catálogo</a></li>
-        <li><a href="{{ route('aroma.nosotros') }}" class="hover:text-white">Nosotros</a></li>
-        <li><a href="{{ route('tracking.mostrar') }}" class="hover:text-white">Tracking</a></li>
+      <h3 class="font-bold mb-4 text-2xl">Navegación</h3>
+      <ul class="space-y-2 text-white">
+        <li><a href="{{ route('aroma.index') }}" class="hover:text-custom-hover">Inicio</a></li>
+        <li><a href="{{ route('aroma.catalogo') }}" class="hover:text-custom-hover">Catálogo</a></li>
+        <li><a href="{{ route('aroma.nosotros') }}" class="hover:text-custom-hover">Nosotros</a></li>
+        <li><a href="{{ route('aroma.inicioSesion') }}" class="hover:text-custom-hover">Tracking</a></li>
       </ul>
     </div>
 
     <!-- Contacto -->
     <div class="w-full md:w-1/4 flex flex-col items-start">
-      <h3 class="font-bold mb-4 text-lg">Contacto</h3>
-      <ul class="space-y-2 text-gray-400">
-        <li><a href="tel:+51990751294" class="hover:text-white flex items-center"><span>📞</span>&nbsp; +51 990751294</a></li>
-        <li><a href="mailto:aromatriada@gmail.com" class="hover:text-white flex items-center"><span>✉️</span>&nbsp; aromatriada@gmail.com</a></li>
-        <li class="flex items-center"><span>📍</span>&nbsp; Calle Cascanueces 111, Lima, Perú</li>
-      </ul>
-    </div>
+    <h3 class="font-bold mb-4 text-2xl">Contacto</h3>
+    <ul class="space-y-2 text-white">
+    <li>
+    <a href="https://wa.me/51990751294?text=¡Hola!%20Estoy%20interesado%20en%20hacer%20un%20pedido" class="hover:text-custom-hover" target="_blank">
+        <i class="fa-solid fa-phone text-2xl text-white"></i> 
+        <span>&nbsp; +51 990751294</span>
+    </a>
+      </li>
+
+        <li>
+            <a href="mailto:aromatriada@gmail.com" class="hover:text-custom-hover">
+                <i class="fa-solid fa-envelope text-2xl text-white"></i> 
+                <span>&nbsp; aromatriada@gmail.com</span>
+            </a>
+        </li>
+        <li class="flex items-center space-x-4">
+            <i class="fa-solid fa-map-pin text-2xl"></i>
+            <span>&nbsp; Calle Cascanueces 111, Lima, Perú</span>
+        </li>
+    </ul>
+</div>
+
 
     <!-- Redes Sociales -->
-    <div class="w-full md:w-1/4 flex flex-col items-start">
-      <h3 class="font-bold mb-4 text-lg">Síguenos</h3>
-      <div class="flex space-x-4 text-gray-400">
-        <a href="https://facebook.com/marca" target="_blank" class="hover:text-white flex items-center space-x-1">
-          <span>🔵</span> <span>Facebook</span>
+    <div class="w-full md:w-1/6 flex flex-col items-start">
+    <h3 class="font-bold mb-4 text-2xl">Síguenos</h3>
+    <div class="flex space-x-4 text-gray-400">
+        <!-- Facebook Icon -->
+        <a href="https://facebook.com/marca" target="_blank">
+            <i class="fa-brands fa-facebook-square text-3xl text-white"></i>
         </a>
-        <a href="https://instagram.com/marca" target="_blank" class="hover:text-white flex items-center space-x-1">
-          <span>🔵</span> <span>Instagram</span>
-        </a>
-        <a href="https://twitter.com/marca" target="_blank" class="hover:text-white flex items-center space-x-1">
-          <span>🔵</span> <span>Twitter</span>
-        </a>
-      </div>
-    </div>
 
-    <!-- Suscripción al Boletín -->
-    <div class="w-full md:w-1/4 flex flex-col items-start">
-      <h3 class="font-bold mb-4 text-lg">Suscríbete</h3>
-      <p class="text-gray-400 mb-2">Recibe nuestras novedades y ofertas exclusivas</p>
-      <form action="#" method="POST" class="flex flex-col">
-        @csrf
-        <input type="email" name="email" placeholder="Ingresa tu email" class="text-black p-2 rounded mb-2" required>
-        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Suscribirse</button>
-      </form>
-    </div>
-  </div>
+        <!-- Instagram Icon -->
+        <a href="https://instagram.com/" target="_blank">
+            <i class="fa-brands fa-instagram-square text-3xl text-white"></i>
+        </a>
 
-  <div class="container mx-auto text-center mt-8">
-    <p class="text-sm text-gray-400">&copy; {{ date('Y') }} Marca. Todos los derechos reservados.</p>
-    <div class="flex justify-center space-x-4 mt-4 text-gray-400">
-      <a href="https://facebook.com/marca" target="_blank" class="hover:text-white">🔵</a>
-      <a href="https://instagram.com/marca" target="_blank" class="hover:text-white">🔵</a>
-      <a href="https://twitter.com/marca" target="_blank" class="hover:text-white">🔵</a>
+        <!-- Twitter Icon -->
+        <a href="https://twitter.com/marca" target="_blank">
+            <i class="fa-brands fa-twitter-square text-3xl text-white"></i>
+        </a>
     </div>
+</div>
+
+
+  <div class="container mx-auto text-center mt-12">
+    <p class="text-md text-white">&copy; {{ date('Y') }} Aroma Triada. Todos los derechos reservados.</p>
   </div>
 </footer>
