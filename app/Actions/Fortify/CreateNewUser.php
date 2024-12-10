@@ -25,16 +25,14 @@ class CreateNewUser implements CreatesNewUsers
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => $this->passwordRules(),
-            'telefono' => ['required', 'string', 'max:15'],
             'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature() ? ['accepted', 'required'] : '',
         ])->validate();
-        
+
         return DB::transaction(function () use ($input) {
             return tap(User::create([
                 'name' => $input['name'],
                 'email' => $input['email'],
                 'password' => Hash::make($input['password']),
-                'telefono' => $input['telefono'], // Nuevo campo
                 'id_rol' => 2, // Rol predeterminado (Usuario básico)
             ]), function (User $user) {
                 $this->createTeam($user);

@@ -12,8 +12,8 @@ class Producto extends Model
     protected $table = 'productos'; // Tabla productos
     protected $primaryKey = 'id_producto'; // Llave primaria
 
-    protected $fillable = ['nombre', 'descripcion', 'precio', 'disponibilidad', 'tipo_producto', 'id_categoria','imagen', 'stock'];
-    
+    protected $fillable = ['nombre', 'descripcion', 'precio', 'disponibilidad', 'tipo_producto', 'id_categoria','imagen'];
+
     
     public function categoria()
     {
@@ -23,9 +23,5 @@ class Producto extends Model
     public function detalles()
     {
         return $this->hasMany(DetallePedido::class, 'id_producto', 'id_producto');
-    }
-    public function scopeAvailable($query)
-    {
-        return $query->where('disponibilidad', 1);
     }
 }

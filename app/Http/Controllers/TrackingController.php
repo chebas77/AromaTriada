@@ -15,7 +15,20 @@ use Illuminate\Database\Eloquent\Model;
 
 class TrackingController extends Controller
 {
+    use HasFactory;
 
+    protected $table = 'tracking'; // Nombre de la tabla en la base de datos
+
+    protected $fillable = [
+        'id_pedido', // Este debe ser cambiado a 'id_venta' si estás trabajando con la tabla venta
+        'origen',
+        'destino',
+        'estado_actual',
+        'fecha_despacho',
+        'fecha_entrega',
+    ];
+
+    // Mostrar todos los tracking del usuario autenticado
     public function mostrar()
 {
     // Verificar si el usuario está autenticado
@@ -34,26 +47,19 @@ class TrackingController extends Controller
     return view('aroma.tracking', compact('tracking'));
 }
 
-
-
-
     // Función para indexar y filtrar los trackings para admin
     public function indexAdmin(Request $request)
 {
-    // Obtener los términos de búsqueda y el filtro de estado
-    $search = $request->input('search');
-    $estado = $request->input('estado');
+    $search = $request->get('search');
+    $query = Tracking::query();
 
-    // Consulta para filtrar los trackings
-    $trackings = Tracking::when($search, function ($query, $search) {
-            return $query->where('id_tracking', 'like', '%' . $search . '%');
-        })
-        ->when($estado, function ($query, $estado) {
-            return $query->where('estado_actual', $estado);
-        })
-        ->orderByDesc('id_tracking')  // Ordenar por ID de Tracking descendente
-        ->paginate(10);  // Mostrar 10 resultados por página
+    // Si se proporciona un filtro de búsqueda por ID Tracking
+    if ($search) {
+        $query->where('id_tracking', $search);
+    }
 
+    // Ordenar por ID Tracking en orden descendente y paginar
+    $trackings = $query->orderBy('id_tracking', 'desc')->paginate(10);
 
     return view('admin.tracking.index', compact('trackings'));
 }

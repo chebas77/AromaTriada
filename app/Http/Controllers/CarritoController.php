@@ -11,58 +11,42 @@ class CarritoController extends Controller
 
 { // Muestra detalles de productos
     public function mostrarDetalle($tipo, $id)
-{
-    if ($tipo === 'producto') {
-        $item = Producto::findOrFail($id);
+    {
+        if ($tipo === 'producto') {
+            $item = Producto::findOrFail($id);
 
-        // Obtenemos el precio del tamaño Grande desde la base de datos
-        $precioGrande = $item->precio;
+            // Obtenemos el precio del tamaño Grande desde la base de datos
+            $precioGrande = $item->precio; // Suponiendo que el precio grande está en el campo `precio` de la base de datos
 
-        // Verificar si el precio del producto está disponible
-        if (!$precioGrande) {
-            abort(404, 'Precio no encontrado para el tamaño Grande');
+            // Verificar si el precio del producto está disponible
+            if (!$precioGrande) {
+                abort(404, 'Precio no encontrado para el tamaño Grande');
+            }
+
+            // Calcular los precios de los otros tamaños en base al tamaño Grande
+            if ($item->categoria->nombre === 'Tortas') {
+                // Suponemos que el tamaño Grande tiene un precio base y calculamos los otros tamaños proporcionalmente
+                $tamanos = [
+                    ['tamano' => 'Pequeña (20 tajadas)', 'precio' => $precioGrande * 0.5],  // 50% del precio Grande
+                    ['tamano' => 'Mediana (30 tajadas)', 'precio' => $precioGrande * 0.8],  // 80% del precio Grande
+                    ['tamano' => 'Grande (40 tajadas)', 'precio' => $precioGrande],        // Precio base para Grande
+                ];
+            } elseif ($item->categoria->nombre === 'Bocaditos') {
+                // Aplicamos la misma lógica proporcional para los Bocaditos
+                $tamanos = [
+                    ['tamano' => 'Pequeño (20 unidades)', 'precio' => $precioGrande * 0.6],  // 60% del precio Grande
+                    ['tamano' => 'Mediano (50 unidades)', 'precio' => $precioGrande * 1],    // 100% del precio Grande
+                    ['tamano' => 'Grande (100 unidades)', 'precio' => $precioGrande * 2],    // 200% del precio Grande
+                ];
+            } else {
+                $tamanos = [];
+            }
+
+            return view('aroma.productos', compact('item', 'tamanos', 'tipo'));
         }
 
-        // Calcular los precios de los otros tamaños en base al tamaño Grande
-        $tamanos = [];  // Inicializamos el arreglo de tamaños
-
-        if ($item->categoria->nombre === 'Tortas') {
-            // Precios calculados proporcionalmente para Tortas
-            $tamanos = [
-                ['tamano' => 'Pequeña (20 tajadas)', 'precio' => $precioGrande * 0.5], // 50% del precio Grande
-                ['tamano' => 'Mediana (30 tajadas)', 'precio' => $precioGrande * 0.8], // 80% del precio Grande
-                ['tamano' => 'Grande (40 tajadas)', 'precio' => $precioGrande],        // Precio base para Grande
-            ];
-        } elseif ($item->categoria->nombre === 'Bocaditos') {
-            // Precios calculados proporcionalmente para Bocaditos
-            $tamanos = [
-                ['tamano' => 'Pequeño (20 unidades)', 'precio' => $precioGrande * 0.6],  // 60% del precio Grande
-                ['tamano' => 'Mediano (50 unidades)', 'precio' => $precioGrande * 1],    // 100% del precio Grande
-                ['tamano' => 'Grande (100 unidades)', 'precio' => $precioGrande * 2],    // 200% del precio Grande
-            ];
-        } elseif ($item->categoria->nombre === 'Boxes') {
-            // Para Boxes, calculamos los tamaños
-            $tamanos = [
-                ['tamano' => 'Pequeño', 'precio' => $precioGrande * 0.5],  // 50% del precio Grande
-                ['tamano' => 'Mediano', 'precio' => $precioGrande],        // 100% del precio Grande
-                ['tamano' => 'Grande', 'precio' => $precioGrande * 1.5],   // 150% del precio Grande
-            ];
-        }
-
-        // Si el producto no tiene tamaños definidos, usamos un precio fijo
-        if (empty($tamanos)) {
-            $tamanos = [
-                ['tamano' => 'Único tamaño', 'precio' => $precioGrande] // Precio fijo
-            ];
-        }
-
-        return view('aroma.productos', compact('item', 'tamanos', 'tipo'));
+        abort(404);
     }
-
-    abort(404);
-}
-
-
     // Muestra el contenido del carrito y los servicios disponibles
     public function mostrarCarrito()
     {
@@ -74,8 +58,7 @@ class CarritoController extends Controller
             return $carry + ($item['total'] ?? 0);
         }, 0);
 
-
-        $servicios = Servicio::where('disponibilidad', true)->get();
+        $servicios = Servicio::all();
 
         return view('aroma.carrito', compact('carrito', 'servicios', 'subtotal', 'productos'));
     }
